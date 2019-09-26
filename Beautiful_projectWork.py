@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#lol xd
+
 from tkinter import *
 from tkinter import messagebox
 import hashlib
@@ -239,9 +239,11 @@ def complete_quiz(win):
     quiz.geometry(size)
     quiz.configure(bg=bgc)
     db.retrieve_quizes()
-    for quiz in range(len(db.quiz_details)):
-        for detail in range(0,len(db.quiz_details[0])-2):
-            Label(quiz, text=db.quiz_details[detail],bg=bgc,fg=fgc,font=def_font).place(x=x_cord*(quiz+1)/5,y=y_cord*(detail+1)/4,anchor='center')
+    print(len(db.quiz_details[0][0]))
+    for quizes in range(len(db.quiz_details)):
+        for detail in range(0,len(db.quiz_details[0][0])):
+            Label(quiz, text=(db.quiz_details[quizes][quizes][detail]),bg=bgc,fg=fgc,font=def_font
+                  ).place(x=x_cord*(quizes+1)/5,y=y_cord*(detail+1)/15,anchor='center')
     
     
 
