@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+#lol xd
 from tkinter import *
 from tkinter import messagebox
 import hashlib
