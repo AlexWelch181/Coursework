@@ -21,7 +21,7 @@ def_font = ('Times New Roman', 20)
 
 
 # Creates account by taking data from entries
-# and then passing them as paraneters to the database class methods
+# and then passing them as parameters to the database class methods
 
 def create_acc(vals, win):
     db.open_data()
@@ -32,11 +32,10 @@ def create_acc(vals, win):
     db.create_account(user, password, conf_password, admin)
     db.close_data()
     win.destroy()
-    Login()
+    login()
 
 
-
-## Checks if the inputted password matches the user password on the database
+# Checks if the inputted password matches the user password on the database
 
 def login_check(vals, win):
     db.open_data()
@@ -57,8 +56,9 @@ def login_check(vals, win):
         messagebox.showerror('Error', 'Username does not exist')
         db.close_data()
 
-## This is the login form for the website, it passes the inputs into the database and validates them
-def Login():
+
+# This is the login form for the website, it passes the inputs into the database and validates them
+def login() -> object:
     log = Tk()
     log.geometry(size)
     log.resizable(False, False)
@@ -66,10 +66,9 @@ def Login():
     log.title('Maths Quiz~Alex Welch')
     Lbls = ['Username', 'Password']
     for x in range(len(Lbls)):
-
         Label(log, text=Lbls[x], bg=bgc, fg=fgc,
               font=def_font).place(x=x_cord * 1 / 3, y=y_cord * 2 / 5
-                                   + 50 * x, anchor='center')
+                                                       + 50 * x, anchor='center')
 
     Label(log, text='Please enter user details below', bg=bgc, fg=fgc,
           font=def_font).place(x=x_cord * 1 / 2, y=y_cord * 1 / 5,
@@ -80,18 +79,18 @@ def Login():
     Password.place(x=x_cord * 3 / 5, y=y_cord * 2 / 5 + 50,
                    anchor='center')
     data = [User, Password]
-    Button(log, text='Login', bg=bgc, fg=fgc, command=lambda : \
-           login_check(data, log)).place(x=x_cord * 1 / 2, y=y_cord * 5
-            / 7, anchor='center')
-    Button(log, text='Exit', bg=bgc, fg=fgc, command=lambda : \
-           log.destroy()).place(x=x_cord * 1 / 2, y=y_cord * 4 / 5,
-                                anchor='center')
-    Button(log, text='Temporary', bg=bgc, fg=fgc, command=lambda : \
-           register(log)).place(x=x_cord * 1 / 2, y=y_cord * 6 / 7,
-                                anchor='center')
+    Button(log, text='login', bg=bgc, fg=fgc, command=lambda: \
+        login_check(data, log)).place(x=x_cord * 1 / 2, y=y_cord * 5
+                                                          / 7, anchor='center')
+    Button(log, text='Exit', bg=bgc, fg=fgc, command=lambda: \
+        log.destroy()).place(x=x_cord * 1 / 2, y=y_cord * 4 / 5,
+                             anchor='center')
+    Button(log, text='Temporary', bg=bgc, fg=fgc, command=lambda: \
+        register(log)).place(x=x_cord * 1 / 2, y=y_cord * 6 / 7,
+                             anchor='center')
     log.mainloop()
 
 
 if __name__ == '__main__':
     db = database()
-    Login()
+    login()
