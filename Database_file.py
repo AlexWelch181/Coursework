@@ -68,7 +68,7 @@ class database:
         self.conn.execute("SELECT USERNAME FROM USERS WHERE USERNAME='"
                           + target + "'")
         results = self.conn.fetchone()
-        if results == None:
+        if results is None:
             results = []
         if len(results) >= 1:
             return True
@@ -88,6 +88,7 @@ class database:
         true_pass = results[0]
         if coded_pass == true_pass:
             self.current_user = user
+            print(self.current_user)
             return True
         else:
             return False
@@ -155,7 +156,7 @@ class database:
             messagebox.showerror('Error', 'Timer should be an integer')
 
     # This method assigned the quiz just made by a teacher to
-    # all of the students in their classs through the link table, quiz questions
+    # all of the students in their class through the link table, quiz questions
     def question_assigned_to_test(self, topic):
         if len(self.current_questions) == 0:
             messagebox.showerror('Error', 'No questions created')
@@ -182,8 +183,10 @@ class database:
 
     # This collects the quizzes that have been assigned to the user and adds them to a list
     def retrieve_quizes(self):
+        print("SELECT USER_ID FROM USERS WHERE USERNAME='" + self.current_user + "'")
         self.conn.execute("SELECT USER_ID FROM USERS WHERE USERNAME='" + self.current_user + "'")
-        userID = str(self.conn.fetchone()[0])
+        userID = str(self.conn.fetchone())
+        print(userID)
         self.conn.execute("SELECT QUIZ_ASSIGNED FROM ASSIGNED_QUIZ WHERE USER='" + userID + "'")
         quizzes = self.conn.fetchall()
         for quiz in range(len(quizzes)):
