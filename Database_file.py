@@ -88,7 +88,6 @@ class database:
         true_pass = results[0]
         if coded_pass == true_pass:
             self.current_user = user
-            print(self.current_user)
             return True
         else:
             return False
@@ -185,20 +184,19 @@ class database:
     def retrieve_quizes(self):
         print("SELECT USER_ID FROM USERS WHERE USERNAME='" + self.current_user + "'")
         self.conn.execute("SELECT USER_ID FROM USERS WHERE USERNAME='" + self.current_user + "'")
-        userID = str(self.conn.fetchone())
-        print(userID)
+        userID = str(self.conn.fetchone()[0])
         self.conn.execute("SELECT QUIZ_ASSIGNED FROM ASSIGNED_QUIZ WHERE USER='" + userID + "'")
         quizzes = self.conn.fetchall()
+        complete_quiz_data = ""
         for quiz in range(len(quizzes)):
             self.conn.execute("SELECT * FROM QUIZ WHERE QUIZ_ID='" + str(quizzes[quiz][0]) + "'")
             quiz_data = self.conn.fetchall()
             for data in range(len(quiz_data[0])):
-                complete_quiz_data = ""
-                complete_quiz_data = complete_quiz_data + str(quiz_data[0][data])
-                print(complete_quiz_data)
-                if data % 3 == 0 and data != 0:
-                    self.quiz_details.append(complete_quiz_data)
-                print(self.quiz_details)
+                complete_quiz_data = complete_quiz_data + " " + str(quiz_data[0][data])
+                if (data+1) % 3 == 0:
+                    if data != 0:
+                        self.quiz_details.append(complete_quiz_data)
+                        complete_quiz_data = ""
 
     # Establish a connection to the database
     def open_data(self):
