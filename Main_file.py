@@ -180,7 +180,7 @@ def view_students(win):
     pass
 
 
-## From here the teachers can view their current test theyre making and publish it to students
+# From here the teachers can view their current test theyre making and publish it to students
 
 def create_quiz(win):
     win.destroy()
@@ -346,7 +346,7 @@ def complete_quiz(win):
             x_pos=x_pos*2
         Label(quiz, text=db.quiz_details[data], bg=bgc, fg=fgc, font=def_font
               ).place(x=x_cord * (x_pos / 4), y=(y_cord * (data % 3) / 5) + 200, anchor='center')
-        Button(quiz, text="Complete This Quiz", bg=bgc, fg=fgc, font=def_font
+        Button(quiz, text="Complete This Quiz", command=lambda data=data:(db.start_test(data)), bg=bgc, fg=fgc, font=def_font
                ).place(x=x_cord * (x_pos / 4), y=(y_cord * (data % 3) / 5) + 250, anchor='center')
 
 

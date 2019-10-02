@@ -182,7 +182,6 @@ class database:
 
     # This collects the quizzes that have been assigned to the user and adds them to a list
     def retrieve_quizes(self):
-        print("SELECT USER_ID FROM USERS WHERE USERNAME='" + self.current_user + "'")
         self.conn.execute("SELECT USER_ID FROM USERS WHERE USERNAME='" + self.current_user + "'")
         userID = str(self.conn.fetchone()[0])
         self.conn.execute("SELECT QUIZ_ASSIGNED FROM ASSIGNED_QUIZ WHERE USER='" + userID + "'")
@@ -193,10 +192,23 @@ class database:
             quiz_data = self.conn.fetchall()
             for data in range(len(quiz_data[0])):
                 complete_quiz_data = complete_quiz_data + " " + str(quiz_data[0][data])
-                if (data+1) % 3 == 0:
+                if (data + 1) % 3 == 0:
                     if data != 0:
                         self.quiz_details.append(complete_quiz_data)
                         complete_quiz_data = ""
+
+    def start_test(self, test):
+        print(self.quiz_details[test])
+        self.conn.execute("SELECT QUESTION_ID FROM QUIZ_QUESTIONS WHERE QUIZ_ID='" +self.quiz_details[test][0::1] + "'")
+        questions = str(self.conn.fetchall()[0])
+        print(questions)
+        print(len(questions))
+        for details in range(len(questions)):
+            self.conn.execute("SELECT * FROM QUESTIONS WHERE QUESTION_ID='" + questions[details] + "'")
+            question_details = self.conn.fetchall()
+
+
+
 
     # Establish a connection to the database
     def open_data(self):
