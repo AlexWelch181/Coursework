@@ -9,7 +9,8 @@ import mysql.connector
 mydb = mysql.connector.connect(host='db4free.net', user='alex_welch',
                                passwd='A1exandm3',
                                database='projectquiz',
-                               buffered=True)
+                               buffered=True
+                               )
 
 import hashlib
 import uuid
@@ -62,6 +63,7 @@ class database:
         self.current_questions = []
         self.current_user = ''
         self.quiz_details = []
+        self.question_id = []
 
     # Searches for a user in the database
     def search_user(self, target):
@@ -198,14 +200,14 @@ class database:
                         complete_quiz_data = ""
 
     def start_test(self, test):
-        print(self.quiz_details[test])
-        self.conn.execute("SELECT QUESTION_ID FROM QUIZ_QUESTIONS WHERE QUIZ_ID='" +self.quiz_details[test][0::1] + "'")
-        questions = str(self.conn.fetchall()[0])
-        print(questions)
-        print(len(questions))
-        for details in range(len(questions)):
-            self.conn.execute("SELECT * FROM QUESTIONS WHERE QUESTION_ID='" + questions[details] + "'")
+        self.conn.execute("SELECT QUESTION_ID FROM QUIZ_QUESTIONS WHERE QUIZ_ID='" + self.quiz_details[test][1:3] + "'")
+        for row in self.conn:
+            self.question_id.append(row[0])
+        print(self.question_id)
+        for details in range(len(self.question_id)):
+            self.conn.execute("SELECT * FROM QUESTIONS WHERE QUESTION_ID='" + str(self.question_id[details]) + "'")
             question_details = self.conn.fetchall()
+            print(question_details)
 
 
 

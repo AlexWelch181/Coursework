@@ -341,12 +341,12 @@ def complete_quiz(win):
     Button(quiz, text='Back', fg=fgc, bg=bgc, font=def_font, command=lambda: (main_screen_user(), quiz.destroy())
            ).place(x=x_cord * 3 / 4, y=y_cord / 10, anchor='center')
     for data in range(int(len(db.quiz_details))):
-        x_pos=1
+        x_pos = 1
         if data + 1 % 3 == 1:
-            x_pos=x_pos*2
+            x_pos = x_pos*2
         Label(quiz, text=db.quiz_details[data], bg=bgc, fg=fgc, font=def_font
               ).place(x=x_cord * (x_pos / 4), y=(y_cord * (data % 3) / 5) + 200, anchor='center')
-        Button(quiz, text="Complete This Quiz", command=lambda data=data:(db.start_test(data)), bg=bgc, fg=fgc, font=def_font
+        Button(quiz, text="Complete This Quiz", command=lambda data=data: (db.start_test(data)), bg=bgc, fg=fgc, font=def_font
                ).place(x=x_cord * (x_pos / 4), y=(y_cord * (data % 3) / 5) + 250, anchor='center')
 
 
