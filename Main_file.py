@@ -226,7 +226,9 @@ def create_quiz(win):
         font=('System', 10),
         width=10,
         height=2,
-        command=lambda: (main_screen_admin(), db.open_data(), db.question_assigned_to_test(topic.get()), db.close_data(), quiz.destroy()))
+        command=lambda: (
+        main_screen_admin(), db.open_data(), db.question_assigned_to_test(topic.get()), db.close_data(),
+        quiz.destroy()))
     create.place(x=x_cord * 1 / 6, y=y_cord * 1 / 4, anchor='center')
     exit.place(x=x_cord * 5 / 6, y=y_cord * 1 / 4, anchor='center')
     save_quiz.place(x=x_cord * 5 / 6, y=y_cord * 4 / 5, anchor='center')
@@ -329,25 +331,42 @@ def main_screen_user():
 
 
 # This function retrieves the quizzes assigned to the user and lets them complete questions
+def reset_tests():
+    db.quiz_details = []
+
+
+def quiz_active(win,frame):
+    frame.destroy()
+
+
+
 def complete_quiz(win):
     win.destroy()
     quiz = Tk()
     quiz.title('Quiz')
     quiz.geometry(size)
     quiz.configure(bg=bgc)
+    quiz_area = Frame(quiz, width=x_cord, height=y_cord, bg=bgc)
+    quiz_area.pack()
     db.retrieve_quizes()
-    Label(quiz, text='Here are the quizzes available to you', bg=bgc, fg=fgc, font=def_font
+    Label(quiz_area, text='Here are the quizzes available to you', bg=bgc, fg=fgc, font=def_font
           ).place(x=x_cord / 2, y=y_cord / 10, anchor='center')
-    Button(quiz, text='Back', fg=fgc, bg=bgc, font=def_font, command=lambda: (main_screen_user(), quiz.destroy())
+    Button(quiz_area, text='Back', fg=fgc, bg=bgc, font=def_font,
+           command=lambda: (main_screen_user(), quiz.destroy(), reset_tests())
            ).place(x=x_cord * 3 / 4, y=y_cord / 10, anchor='center')
-    for data in range(int(len(db.quiz_details))):
-        x_pos = 1
-        if data + 1 % 3 == 1:
-            x_pos = x_pos*2
-        Label(quiz, text=db.quiz_details[data], bg=bgc, fg=fgc, font=def_font
-              ).place(x=x_cord * (x_pos / 4), y=(y_cord * (data % 3) / 5) + 200, anchor='center')
-        Button(quiz, text="Complete This Quiz", command=lambda data=data: (db.start_test(data)), bg=bgc, fg=fgc, font=def_font
-               ).place(x=x_cord * (x_pos / 4), y=(y_cord * (data % 3) / 5) + 250, anchor='center')
+    x_pos = 1
+    y_pos = 1
+    for data in range(len(db.quiz_details)):
+        if (data + 1) % 4 == 0 and data != 0:
+            x_pos += 1
+            y_pos = 1
+        y_pos += 1
+        Label(quiz_area, text=db.quiz_details[data], bg=bgc, fg=fgc, font=def_font
+              ).place(x=x_cord * (x_pos / 4), y=(y_cord * y_pos / 5) - 100, anchor='center')
+        Button(quiz_area, text="Complete This Quiz", command=lambda data=data: (db.start_test(data),quiz_active(quiz,quiz_area)), bg=bgc, fg=fgc,
+               font=def_font
+               ).place(x=x_cord * (x_pos / 4), y=(y_cord * y_pos / 5) - 50, anchor='center')
+    quiz.mainloop()
 
 
 def view_progress(win):

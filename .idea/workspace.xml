@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1df29f0a-23bd-45a2-af99-ad9cdea860a0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Coursework.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Coursework.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="1df29f0a-23bd-45a2-af99-ad9cdea860a0" name="Default Changelist" comment="New Stuff:&#10;new func_start test&#10;still buggy">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Database_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_file.py" afterDir="false" />
@@ -22,7 +20,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Git/cmd/git.exe" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -65,7 +63,7 @@
     </recent_temporary>
   </component>
   <component name="SvnConfiguration">
-    <configuration />
+    <configuration>C:\Users\V20898\AppData\Roaming\Subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -82,7 +80,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570007237769</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="New Stuff:&#10;new func_start test&#10;still buggy">
+      <created>1570094477154</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1570094477154</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -100,7 +105,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="New Function Start Test:&#10;error: overlapping quizzes in student side" />
-    <option name="LAST_COMMIT_MESSAGE" value="New Function Start Test:&#10;error: overlapping quizzes in student side" />
+    <MESSAGE value="New Stuff:&#10;new func_start test&#10;still buggy" />
+    <option name="LAST_COMMIT_MESSAGE" value="New Stuff:&#10;new func_start test&#10;still buggy" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

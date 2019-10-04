@@ -203,14 +203,9 @@ class database:
         self.conn.execute("SELECT QUESTION_ID FROM QUIZ_QUESTIONS WHERE QUIZ_ID='" + self.quiz_details[test][1:3] + "'")
         for row in self.conn:
             self.question_id.append(row[0])
-        print(self.question_id)
         for details in range(len(self.question_id)):
             self.conn.execute("SELECT * FROM QUESTIONS WHERE QUESTION_ID='" + str(self.question_id[details]) + "'")
             question_details = self.conn.fetchall()
-            print(question_details)
-
-
-
 
     # Establish a connection to the database
     def open_data(self):
