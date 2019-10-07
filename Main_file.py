@@ -2,6 +2,11 @@
 # -*- coding: utf-8 -*-
 from tkinter import *
 from Database_file import *
+import time
+import random
+
+# I am using tkinter as it is a simple GUI tool
+# I import my other file to handle my database functions
 
 # These are the base size and colour variables for the program
 # I put these here so that if i wanna change the size of my window everything else will change in proportion
@@ -135,7 +140,7 @@ def main_screen_admin():
     ).place(x=x_cord * 2 / 3, y=y_cord * 1 / 2, anchor='center')
 
 
-## This allows teachers to create accounts for students
+# This allows teachers to create accounts for students
 def register(win):
     win.destroy()
     reg = Tk()
@@ -227,15 +232,14 @@ def create_quiz(win):
         width=10,
         height=2,
         command=lambda: (
-        main_screen_admin(), db.open_data(), db.question_assigned_to_test(topic.get()), db.close_data(),
-        quiz.destroy()))
+            main_screen_admin(), db.open_data(), db.question_assigned_to_test(topic.get()), db.close_data(),
+            quiz.destroy()))
     create.place(x=x_cord * 1 / 6, y=y_cord * 1 / 4, anchor='center')
     exit.place(x=x_cord * 5 / 6, y=y_cord * 1 / 4, anchor='center')
     save_quiz.place(x=x_cord * 5 / 6, y=y_cord * 4 / 5, anchor='center')
 
 
 # Gives GUI for creating questions including database input
-
 def create_question():
     question = Tk()
     question.geometry(size)
@@ -335,11 +339,38 @@ def reset_tests():
     db.quiz_details = []
 
 
-def quiz_active(win,frame):
+def quiz_active(win, frame, question):
     frame.destroy()
+    if question is None:
+        question = 0
+    timer = db.question_details[question][2]
+
+    Label(win, text=db.question_details[question][1], bg=bgc, fg=fgc, font=def_font
+          ).place(x=x_cord / 2, y=y_cord / 10, anchor='center')
+    correct_ans = Button(win, text=db.answers[0][1], bg=bgc, fg=fgc, font=def_font)
+    incorrect_ans_1 = Button(win, text=db.answers[1][1], bg=bgc, fg=fgc, font=def_font)
+    incorrect_ans_2 = Button(win, text=db.answers[2][1], bg=bgc, fg=fgc, font=def_font)
+    incorrect_ans_3 = Button(win, text=db.answers[3][1], bg=bgc, fg=fgc, font=def_font)
+    ans_buttons = [correct_ans, incorrect_ans_1, incorrect_ans_2, incorrect_ans_3]
+    for elements in range(4):
+        selected = random.choice(ans_buttons)
+        if elements == 0:
+            selected.place(x=x_cord / 3, y=y_cord / 3, anchor='center')
+        elif elements == 1:
+            selected.place(x=x_cord * (2 / 3), y=y_cord / 3, anchor='center')
+        elif elements == 2:
+            selected.place(x=x_cord / 3, y=y_cord * (2 / 3), anchor='center')
+        else:
+            selected.place(x=x_cord * (2 / 3), y=y_cord * (2 / 3), anchor='center')
+        ans_buttons.remove(selected)
+        print(timer)
+        while timer != 0:
+            time.sleep(1)
+            timer -= 1
+            print(timer)
 
 
-
+# This function shows all of the quizzes available to the user and lets them load them
 def complete_quiz(win):
     win.destroy()
     quiz = Tk()
@@ -348,6 +379,7 @@ def complete_quiz(win):
     quiz.configure(bg=bgc)
     quiz_area = Frame(quiz, width=x_cord, height=y_cord, bg=bgc)
     quiz_area.pack()
+    initial = 0
     db.retrieve_quizes()
     Label(quiz_area, text='Here are the quizzes available to you', bg=bgc, fg=fgc, font=def_font
           ).place(x=x_cord / 2, y=y_cord / 10, anchor='center')
@@ -363,7 +395,8 @@ def complete_quiz(win):
         y_pos += 1
         Label(quiz_area, text=db.quiz_details[data], bg=bgc, fg=fgc, font=def_font
               ).place(x=x_cord * (x_pos / 4), y=(y_cord * y_pos / 5) - 100, anchor='center')
-        Button(quiz_area, text="Complete This Quiz", command=lambda data=data: (db.start_test(data),quiz_active(quiz,quiz_area)), bg=bgc, fg=fgc,
+        Button(quiz_area, text="Complete This Quiz",
+               command=lambda data=data: (db.start_test(data), quiz_active(quiz, quiz_area, initial)), bg=bgc, fg=fgc,
                font=def_font
                ).place(x=x_cord * (x_pos / 4), y=(y_cord * y_pos / 5) - 50, anchor='center')
     quiz.mainloop()

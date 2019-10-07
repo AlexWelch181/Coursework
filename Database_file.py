@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # This file is used to create the database class and execute all sql commands
-
+# I am using mysql to connect to my online database
 import mysql.connector
 
 # Connecting to the host database
@@ -12,10 +12,10 @@ mydb = mysql.connector.connect(host='db4free.net', user='alex_welch',
                                buffered=True
                                )
 
-import hashlib
-import uuid
-from datetime import date
-from tkinter import messagebox
+import hashlib  # This is a hash library for my password storage
+import uuid  # This is a salting library to keep hashed passwords unique
+from datetime import date  # This allows me to collect the dates set
+from tkinter import messagebox  # This is a part of the tkinter module that creates pop-ups
 
 
 class database:
@@ -64,6 +64,8 @@ class database:
         self.current_user = ''
         self.quiz_details = []
         self.question_id = []
+        self.answers = []
+        self.question_details = []
 
     # Searches for a user in the database
     def search_user(self, target):
@@ -199,13 +201,22 @@ class database:
                         self.quiz_details.append(complete_quiz_data)
                         complete_quiz_data = ""
 
+    # This function takes all the quizzes and decompiles them into their questions
     def start_test(self, test):
         self.conn.execute("SELECT QUESTION_ID FROM QUIZ_QUESTIONS WHERE QUIZ_ID='" + self.quiz_details[test][1:3] + "'")
         for row in self.conn:
             self.question_id.append(row[0])
         for details in range(len(self.question_id)):
             self.conn.execute("SELECT * FROM QUESTIONS WHERE QUESTION_ID='" + str(self.question_id[details]) + "'")
-            question_details = self.conn.fetchall()
+            self.question_details = self.conn.fetchall()
+        print(self.question_details)
+        print(len(self.question_details))
+        for ans in range(len(self.question_details)):
+            print(self.question_details[ans][0])
+            self.conn.execute(
+                "SELECT * FROM ANSWERS WHERE PARENT_QUESTION='" + str(self.question_details[ans][0]) + "'")
+            self.answers = self.conn.fetchall()
+        print(self.answers)
 
     # Establish a connection to the database
     def open_data(self):
