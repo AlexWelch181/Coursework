@@ -339,18 +339,37 @@ def reset_tests():
     db.quiz_details = []
 
 
+def time_out():
+    print("You ran out of time")
+
+
+def timer(time_left, time_tkvar):
+    while time_left != 0:
+        time.sleep(1)
+        time_left -= 1
+        time_tkvar.set("Time left: " + str(timer))
+    time_out()
+    
+    
+def submit_ans(Correct):
+    pass
+
+
 def quiz_active(win, frame, question):
     frame.destroy()
     if question is None:
         question = 0
-    timer = db.question_details[question][2]
-
+    time = db.question_details[question][2]
+    current_time = StringVar(win)
+    current_time.set("Time left: " + str(time))
+    Label(win, textvariable=current_time, bg=bgc, fg=fgc, font=def_font
+          ).place(x=x_cord * 4 / 5, y=y_cord * 1 / 10, anchor='center')
     Label(win, text=db.question_details[question][1], bg=bgc, fg=fgc, font=def_font
           ).place(x=x_cord / 2, y=y_cord / 10, anchor='center')
-    correct_ans = Button(win, text=db.answers[0][1], bg=bgc, fg=fgc, font=def_font)
-    incorrect_ans_1 = Button(win, text=db.answers[1][1], bg=bgc, fg=fgc, font=def_font)
-    incorrect_ans_2 = Button(win, text=db.answers[2][1], bg=bgc, fg=fgc, font=def_font)
-    incorrect_ans_3 = Button(win, text=db.answers[3][1], bg=bgc, fg=fgc, font=def_font)
+    correct_ans = Button(win, text=db.answers[0][1], bg=bgc, fg=fgc, font=def_font, command=submit_ans(1))
+    incorrect_ans_1 = Button(win, text=db.answers[1][1], bg=bgc, fg=fgc, font=def_font, command=submit_ans(0))
+    incorrect_ans_2 = Button(win, text=db.answers[2][1], bg=bgc, fg=fgc, font=def_font, command=submit_ans(0))
+    incorrect_ans_3 = Button(win, text=db.answers[3][1], bg=bgc, fg=fgc, font=def_font, command=submit_ans(0))
     ans_buttons = [correct_ans, incorrect_ans_1, incorrect_ans_2, incorrect_ans_3]
     for elements in range(4):
         selected = random.choice(ans_buttons)
@@ -363,12 +382,7 @@ def quiz_active(win, frame, question):
         else:
             selected.place(x=x_cord * (2 / 3), y=y_cord * (2 / 3), anchor='center')
         ans_buttons.remove(selected)
-        print(timer)
-        while timer != 0:
-            time.sleep(1)
-            timer -= 1
-            print(timer)
-
+    timer(time, current_time)
 
 # This function shows all of the quizzes available to the user and lets them load them
 def complete_quiz(win):

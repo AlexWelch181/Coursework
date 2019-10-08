@@ -209,14 +209,10 @@ class database:
         for details in range(len(self.question_id)):
             self.conn.execute("SELECT * FROM QUESTIONS WHERE QUESTION_ID='" + str(self.question_id[details]) + "'")
             self.question_details = self.conn.fetchall()
-        print(self.question_details)
-        print(len(self.question_details))
         for ans in range(len(self.question_details)):
-            print(self.question_details[ans][0])
             self.conn.execute(
                 "SELECT * FROM ANSWERS WHERE PARENT_QUESTION='" + str(self.question_details[ans][0]) + "'")
             self.answers = self.conn.fetchall()
-        print(self.answers)
 
     # Establish a connection to the database
     def open_data(self):
