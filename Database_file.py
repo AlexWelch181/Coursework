@@ -9,7 +9,6 @@ import mysql.connector
 mydb = mysql.connector.connect(host='db4free.net', user='alex_welch',
                                passwd='A1exandm3',
                                database='projectquiz',
-                               buffered=True
                                )
 
 import hashlib  # This is a hash library for my password storage
@@ -108,14 +107,7 @@ class database:
             return False
 
     # This method makes sure the new account's password is encrypted and has a salt to make it even harder to crack
-    def create_account(
-            self,
-            user,
-            password,
-            conf_password,
-            admin,
-    ):
-
+    def create_account(self, user, password, conf_password, admin,):
         if admin == 'True':
             admin = 1
         else:

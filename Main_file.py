@@ -185,7 +185,7 @@ def view_students(win):
     pass
 
 
-# From here the teachers can view their current test theyre making and publish it to students
+# From here the teachers can view their current test they're making and publish it to students
 
 def create_quiz(win):
     win.destroy()
@@ -343,15 +343,17 @@ def time_out():
     print("You ran out of time")
 
 
-def timer(time_left, time_tkvar):
-    while time_left != 0:
-        time.sleep(1)
-        time_left -= 1
-        time_tkvar.set("Time left: " + str(timer))
-    time_out()
-    
-    
-def submit_ans(Correct):
+def timer(time_left, time_tkvar, time_lbl, win):
+    time_left -= 1
+    print(time_left)
+    time_tkvar.set("Time left: " + str(time_left))
+    if time_left == 0:
+        time_out()
+    else:
+        time_lbl.after(1000, timer, time_left, time_tkvar, time_lbl, win)
+
+
+def submit_ans(correct):
     pass
 
 
@@ -359,13 +361,13 @@ def quiz_active(win, frame, question):
     frame.destroy()
     if question is None:
         question = 0
-    time = db.question_details[question][2]
+    time_for_q = db.question_details[question][2]
     current_time = StringVar(win)
     current_time.set("Time left: " + str(time))
-    Label(win, textvariable=current_time, bg=bgc, fg=fgc, font=def_font
-          ).place(x=x_cord * 4 / 5, y=y_cord * 1 / 10, anchor='center')
     Label(win, text=db.question_details[question][1], bg=bgc, fg=fgc, font=def_font
           ).place(x=x_cord / 2, y=y_cord / 10, anchor='center')
+    time_label = Label(win, textvariable=current_time, bg=bgc, fg=fgc, font=def_font)
+    time_label.place(x=x_cord * 4 / 5, y=y_cord * 1 / 10, anchor='center')
     correct_ans = Button(win, text=db.answers[0][1], bg=bgc, fg=fgc, font=def_font, command=submit_ans(1))
     incorrect_ans_1 = Button(win, text=db.answers[1][1], bg=bgc, fg=fgc, font=def_font, command=submit_ans(0))
     incorrect_ans_2 = Button(win, text=db.answers[2][1], bg=bgc, fg=fgc, font=def_font, command=submit_ans(0))
@@ -382,7 +384,9 @@ def quiz_active(win, frame, question):
         else:
             selected.place(x=x_cord * (2 / 3), y=y_cord * (2 / 3), anchor='center')
         ans_buttons.remove(selected)
-    timer(time, current_time)
+    timer(time_for_q, current_time, time_label, win)
+    win.mainloop()
+
 
 # This function shows all of the quizzes available to the user and lets them load them
 def complete_quiz(win):
@@ -413,7 +417,7 @@ def complete_quiz(win):
                command=lambda data=data: (db.start_test(data), quiz_active(quiz, quiz_area, initial)), bg=bgc, fg=fgc,
                font=def_font
                ).place(x=x_cord * (x_pos / 4), y=(y_cord * y_pos / 5) - 50, anchor='center')
-    quiz.mainloop()
+
 
 
 def view_progress(win):
