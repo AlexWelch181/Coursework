@@ -234,6 +234,7 @@ def create_quiz(win):
         command=lambda: (
             main_screen_admin(), db.open_data(), db.question_assigned_to_test(topic.get()), db.close_data(),
             quiz.destroy()))
+
     create.place(x=x_cord * 1 / 6, y=y_cord * 1 / 4, anchor='center')
     exit.place(x=x_cord * 5 / 6, y=y_cord * 1 / 4, anchor='center')
     save_quiz.place(x=x_cord * 5 / 6, y=y_cord * 4 / 5, anchor='center')
@@ -339,53 +340,84 @@ def reset_tests():
     db.quiz_details = []
 
 
-def time_out():
-    print("You ran out of time")
+def time_out(win, frame, next_question):
+    print("You ran out of time!")
+    win.after(2000, quiz_active, win, frame, next_question)
 
 
-def timer(time_left, time_tkvar, time_lbl, win):
-    time_left -= 1
-    print(time_left)
-    time_tkvar.set("Time left: " + str(time_left))
-    if time_left == 0:
-        time_out()
+# This is a countdown timer for the student to complete the question
+def timer(time_left, time_tkvar, time_lbl, win, frame, question):
+    print(ans_given)
+    if ans_given:
+        time_lbl.after_cancel(afterId)
+        pass
     else:
-        time_lbl.after(1000, timer, time_left, time_tkvar, time_lbl, win)
+        time_left -= 1
+        time_tkvar.set("Time left: " + str(time_left))
+        if time_left == 0:
+            question += 1
+            time_out(win, frame, question)
+            pass
+        else:
+            # this makes sure that the label updates every second by adding a callback to the event loop
+            afterId = time_lbl.after(1000, timer, time_left, time_tkvar, time_lbl, win, frame, question)
 
 
-def submit_ans(correct):
-    pass
+def submit_ans(correct, score, win, frame, question):
+    ans_given = True
+    if correct == 1:
+        score += 1
+        print("Correct!")
+        quiz_active(win, frame, question)
+    else:
+        print("Incorrect")
+        quiz_active(win, frame, question)
+
+
+def end_test():
+    print("test has ended")
 
 
 def quiz_active(win, frame, question):
+    global ans_given
+    ans_given = False
     frame.destroy()
-    if question is None:
-        question = 0
-    time_for_q = db.question_details[question][2]
-    current_time = StringVar(win)
-    current_time.set("Time left: " + str(time))
-    Label(win, text=db.question_details[question][1], bg=bgc, fg=fgc, font=def_font
-          ).place(x=x_cord / 2, y=y_cord / 10, anchor='center')
-    time_label = Label(win, textvariable=current_time, bg=bgc, fg=fgc, font=def_font)
-    time_label.place(x=x_cord * 4 / 5, y=y_cord * 1 / 10, anchor='center')
-    correct_ans = Button(win, text=db.answers[0][1], bg=bgc, fg=fgc, font=def_font, command=submit_ans(1))
-    incorrect_ans_1 = Button(win, text=db.answers[1][1], bg=bgc, fg=fgc, font=def_font, command=submit_ans(0))
-    incorrect_ans_2 = Button(win, text=db.answers[2][1], bg=bgc, fg=fgc, font=def_font, command=submit_ans(0))
-    incorrect_ans_3 = Button(win, text=db.answers[3][1], bg=bgc, fg=fgc, font=def_font, command=submit_ans(0))
-    ans_buttons = [correct_ans, incorrect_ans_1, incorrect_ans_2, incorrect_ans_3]
-    for elements in range(4):
-        selected = random.choice(ans_buttons)
-        if elements == 0:
-            selected.place(x=x_cord / 3, y=y_cord / 3, anchor='center')
-        elif elements == 1:
-            selected.place(x=x_cord * (2 / 3), y=y_cord / 3, anchor='center')
-        elif elements == 2:
-            selected.place(x=x_cord / 3, y=y_cord * (2 / 3), anchor='center')
-        else:
-            selected.place(x=x_cord * (2 / 3), y=y_cord * (2 / 3), anchor='center')
-        ans_buttons.remove(selected)
-    timer(time_for_q, current_time, time_label, win)
-    win.mainloop()
+    if question == 0:
+        score = 0
+    if question > (len(db.question_details) - 1):
+        end_test()
+    else:
+        time_for_q = db.question_details[question][2]
+        current_time = StringVar(win)
+        current_time.set("Time left: " + str(time))
+        Label(win, text=db.question_details[question][1], bg=bgc, fg=fgc, font=def_font
+              ).place(x=x_cord / 2, y=y_cord / 10, anchor='center')
+        time_label = Label(win, textvariable=current_time, bg=bgc, fg=fgc, font=def_font)
+        time_label.place(x=x_cord * 4 / 5, y=y_cord * 1 / 10, anchor='center')
+        correct_ans = Button(win, text=db.answers[0][1], bg=bgc, fg=fgc, font=def_font, width=20, height=3,
+                             command=lambda: submit_ans(1, score, win, frame, question))
+        incorrect_ans_1 = Button(win, text=db.answers[1][1], bg=bgc, fg=fgc, font=def_font, width=20, height=3,
+                                 command=lambda: submit_ans(0, score, win, frame, question))
+        incorrect_ans_2 = Button(win, text=db.answers[2][1], bg=bgc, fg=fgc, font=def_font, width=20, height=3,
+                                 command=lambda: submit_ans(0, score, win, frame, question))
+        incorrect_ans_3 = Button(win, text=db.answers[3][1], bg=bgc, fg=fgc, font=def_font, width=20, height=3,
+                                 command=lambda: submit_ans(0, score, win, frame, question))
+        ans_buttons = [correct_ans, incorrect_ans_1, incorrect_ans_2, incorrect_ans_3]
+        # this randomly assigns the placement of the buttons so that the correct answer isn't always in the same place
+        for elements in range(4):
+            selected = random.choice(ans_buttons)
+            if elements == 0:
+                selected.place(x=x_cord / 3, y=y_cord / 3, anchor='center')
+            elif elements == 1:
+                selected.place(x=x_cord * (2 / 3), y=y_cord / 3, anchor='center')
+            elif elements == 2:
+                selected.place(x=x_cord / 3, y=y_cord * (2 / 3), anchor='center')
+            else:
+                selected.place(x=x_cord * (2 / 3), y=y_cord * (2 / 3), anchor='center')
+            ans_buttons.remove(selected)
+        # starts the timer after all the widgets have been created
+        timer(time_for_q, current_time, time_label, win, frame, question)
+        win.mainloop()
 
 
 # This function shows all of the quizzes available to the user and lets them load them
@@ -417,7 +449,6 @@ def complete_quiz(win):
                command=lambda data=data: (db.start_test(data), quiz_active(quiz, quiz_area, initial)), bg=bgc, fg=fgc,
                font=def_font
                ).place(x=x_cord * (x_pos / 4), y=(y_cord * y_pos / 5) - 50, anchor='center')
-
 
 
 def view_progress(win):
