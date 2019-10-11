@@ -184,7 +184,7 @@ class database:
         quizzes = self.conn.fetchall()
         complete_quiz_data = ""
         for quiz in range(len(quizzes)):
-            self.conn.execute("SELECT * FROM QUIZ WHERE QUIZ_ID='" + str(quizzes[quiz][0]) + "'AND COMPLETE LIKE 0")
+            self.conn.execute("SELECT * FROM QUIZ WHERE QUIZ_ID='" + str(quizzes[quiz][0]) + "'")
             quiz_data = self.conn.fetchall()
             for data in range(len(quiz_data[0])):
                 complete_quiz_data = complete_quiz_data + " " + str(quiz_data[0][data])
@@ -201,10 +201,13 @@ class database:
         for details in range(len(self.question_id)):
             self.conn.execute("SELECT * FROM QUESTIONS WHERE QUESTION_ID='" + str(self.question_id[details]) + "'")
             self.question_details = self.conn.fetchall()
+            print(self.question_details)
         for ans in range(len(self.question_details)):
             self.conn.execute(
                 "SELECT * FROM ANSWERS WHERE PARENT_QUESTION='" + str(self.question_details[ans][0]) + "'")
             self.answers = self.conn.fetchall()
+            print(self.answers)
+
 
     def end_test(self, score):
         pass

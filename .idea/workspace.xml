@@ -107,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570699319457</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="new update">
+      <created>1570799890534</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1570799890534</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TodoView">
@@ -152,7 +159,8 @@
     <MESSAGE value="Formatting Fixed, new frame so widgets can be deleted" />
     <MESSAGE value="Tests can be completed:&#10;need to allow the buttons to send answers to database&#10;check timer" />
     <MESSAGE value="Now checks if an answer has been inputted:&#10;however doesnt stop the loop,&#10;maybe use decorator" />
-    <option name="LAST_COMMIT_MESSAGE" value="Now checks if an answer has been inputted:&#10;however doesnt stop the loop,&#10;maybe use decorator" />
+    <MESSAGE value="new update" />
+    <option name="LAST_COMMIT_MESSAGE" value="new update" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

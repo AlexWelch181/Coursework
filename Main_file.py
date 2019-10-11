@@ -348,6 +348,7 @@ def time_out(win, frame, next_question):
 # This is a countdown timer for the student to complete the question
 def timer(time_left, time_tkvar, time_lbl, win, frame, question):
     if submit_ans.has_been_called:
+        time_lbl.after_cancel(afterId)
         pass
     else:
         time_left -= 1
