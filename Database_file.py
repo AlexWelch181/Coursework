@@ -107,7 +107,7 @@ class database:
             return False
 
     # This method makes sure the new account's password is encrypted and has a salt to make it even harder to crack
-    def create_account(self, user, password, conf_password, admin,):
+    def create_account(self, user, password, conf_password, admin, ):
         if admin == 'True':
             admin = 1
         else:
@@ -184,7 +184,7 @@ class database:
         quizzes = self.conn.fetchall()
         complete_quiz_data = ""
         for quiz in range(len(quizzes)):
-            self.conn.execute("SELECT * FROM QUIZ WHERE QUIZ_ID='" + str(quizzes[quiz][0]) + "'")
+            self.conn.execute("SELECT * FROM QUIZ WHERE QUIZ_ID='" + str(quizzes[quiz][0]) + "'AND COMPLETE LIKE 0")
             quiz_data = self.conn.fetchall()
             for data in range(len(quiz_data[0])):
                 complete_quiz_data = complete_quiz_data + " " + str(quiz_data[0][data])
@@ -205,6 +205,9 @@ class database:
             self.conn.execute(
                 "SELECT * FROM ANSWERS WHERE PARENT_QUESTION='" + str(self.question_details[ans][0]) + "'")
             self.answers = self.conn.fetchall()
+
+    def end_test(self, score):
+        pass
 
     # Establish a connection to the database
     def open_data(self):

@@ -347,9 +347,7 @@ def time_out(win, frame, next_question):
 
 # This is a countdown timer for the student to complete the question
 def timer(time_left, time_tkvar, time_lbl, win, frame, question):
-    print(ans_given)
-    if ans_given:
-        time_lbl.after_cancel(afterId)
+    if submit_ans.has_been_called:
         pass
     else:
         time_left -= 1
@@ -362,31 +360,38 @@ def timer(time_left, time_tkvar, time_lbl, win, frame, question):
             # this makes sure that the label updates every second by adding a callback to the event loop
             afterId = time_lbl.after(1000, timer, time_left, time_tkvar, time_lbl, win, frame, question)
 
-
 def submit_ans(correct, score, win, frame, question):
-    ans_given = True
+    submit_ans.has_been_called = True
+    question += 1
     if correct == 1:
         score += 1
         print("Correct!")
-        quiz_active(win, frame, question)
+        quiz_active(win, frame, question, score)
     else:
         print("Incorrect")
-        quiz_active(win, frame, question)
+        quiz_active(win, frame, question, score)
 
 
-def end_test():
+def end_test(win, score, question):
     print("test has ended")
+    db.end_test(score)
+    win.destroy()
+    end_screen = Tk()
+    end_screen.geometry(size)
+    end_screen.title('Quiz Complete!')
+    end_screen.configure(bg=bgc)
+    Label(end_screen, text="You Completed a quiz", fg=fgc, bg=bgc, font=def_font
+          ).place(x=x_cord/2, y=y_cord*1/7, anchor='center')
+    Label(end_screen, text="You Scored " + str(score) + "/" + str(question), fg=fgc, bg=bgc, font=def_font
+          ).place(x=x_cord/2, y=y_cord*1/2, anchor='center')
 
-
-def quiz_active(win, frame, question):
-    global ans_given
-    ans_given = False
+def quiz_active(win, frame, question, score=0):
     frame.destroy()
-    if question == 0:
-        score = 0
     if question > (len(db.question_details) - 1):
-        end_test()
+        end_test(win, score, question)
     else:
+        if submit_ans.has_been_called:
+            submit_ans.has_been_called = False
         time_for_q = db.question_details[question][2]
         current_time = StringVar(win)
         current_time.set("Time left: " + str(time))
@@ -457,4 +462,5 @@ def view_progress(win):
 
 if __name__ == '__main__':
     db = database()
+    submit_ans.has_been_called = False
     Login()
