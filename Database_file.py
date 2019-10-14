@@ -174,7 +174,7 @@ class database:
         # checking that the timer is an integer and not any other input
         if type(timer) == int:
             sql = """INSERT INTO QUESTIONS(QUESTION_TEXT,TIMER) VALUES(%s,%s)"""
-            q_text = details[0].get()
+            q_text = details[0].get("1.0", 'end-1c')
             self.conn.execute(sql, [q_text, timer])
             self.conn.execute(
                 "SELECT QUESTION_ID FROM QUESTIONS WHERE QUESTION_TEXT='"
@@ -329,13 +329,9 @@ class database:
         )
         userID = str(self.conn.fetchone()[0])
         self.personal_progress = []
-        self.conn.execute(
-            "SELECT SCORE, DATE_COMPLETED FROM ASSIGNED_QUIZ WHERE USER='"
-            + userID
-            + "'"
-        )
+        self.conn.execute("SELECT SCORE, DATE_COMPLETED FROM ASSIGNED_QUIZ WHERE USER='" + userID + "'AND COMPLETE = 1")
         self.personal_progress = list(self.conn.fetchall())
-        print(self.personal_progress)
+        return self.personal_progress
 
     # Establish a connection to the database
     def open_data(self):

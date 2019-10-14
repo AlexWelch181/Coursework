@@ -310,7 +310,7 @@ def create_quiz(win):
     quiz.geometry(size)
     quiz.configure(bg=bgc)
     quiz.resizable(False, False)
-    topic = Entry(quiz, justify="center")
+    topic = Text(quiz, width=20, height=3)
     topic.place(
         x=x_cord * 1 / 2, y=y_cord * 1 / 2, anchor="center"
     )
@@ -366,7 +366,7 @@ def create_quiz(win):
         command=lambda: (
             main_screen_admin(),
             db.open_data(),
-            db.question_assigned_to_test(topic.get()),
+            db.question_assigned_to_test(topic.get("1.0", 'end-1c')),
             db.close_data(),
             quiz.destroy(),
         ),
@@ -389,7 +389,7 @@ def create_question():
     question.geometry(size)
     question.configure(bg=bgc)
     question.resizable(False, False)
-    q_var = Entry(question, justify="center", width=40)
+    q_var = Text(question, width=25, height=4)
     ans_1 = Entry(question, justify="center", width=25)
     ans_2 = Entry(question, justify="center", width=25)
     ans_3 = Entry(question, justify="center", width=25)
@@ -833,15 +833,17 @@ def view_progress(win):
         text="This is your Progress",
         bg=bgc,
         fg=fgc,
-    ).place(x=x_cord/5,y=y_cord/5, anchor='center')
+        font=def_font,
+    ).place(x=x_cord/5, y=y_cord/10, anchor='center')
     Button(
         progress,
         text="Back",
         bg=bgc,
         fg=fgc,
+        font=def_font,
         command=lambda: (stop_graph(progress), main_screen_user())
     ).place(x=x_cord*9/10, y=y_cord/7, anchor='center')
-    db.retrieve_completed()
+    print(db.retrieve_completed())
 
     progress.mainloop()
 
