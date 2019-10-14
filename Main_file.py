@@ -4,6 +4,11 @@ from tkinter import *
 from Database_file import *
 import time
 import random
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.backend_bases import key_press_handler
+from matplotlib.figure import Figure
+import numpy as np
 
 # I am using tkinter as it is a simple GUI tool
 # I import my other file to handle my database functions
@@ -531,7 +536,7 @@ def time_out(win, frame, next_question):
 
 # This is a countdown timer for the student to complete the question
 def timer(
-    time_left, time_tkvar, time_lbl, win, frame, question
+        time_left, time_tkvar, time_lbl, win, frame, question
 ):
     if submit_ans.has_been_called:
         pass
@@ -599,13 +604,20 @@ def end_test(win, score, question):
     Label(
         end_screen,
         text="You Scored "
-        + str(score)
-        + "/"
-        + str(question),
+             + str(score)
+             + "/"
+             + str(question),
         fg=fgc,
         bg=bgc,
         font=def_font,
     ).place(x=x_cord / 2, y=y_cord * 1 / 2, anchor="center")
+    Button(
+        end_screen,
+        text="Exit",
+        fg=fgc,
+        bg=bgc,
+        font=def_font
+    ).place(x=x_cord * 4 / 5, y=y_cord / 5, anchor='center')
     db.end_test(score, question)
     db.close_data()
 
@@ -796,15 +808,42 @@ def complete_quiz(win):
             bg=bgc,
             fg=fgc,
             font=def_font,
-        ).place(
-            x=x_cord * (x_pos / 4),
-            y=(y_cord * y_pos / 5) - 50,
-            anchor="center",
-        )
+        ).place(x=x_cord * (x_pos / 4), y=(y_cord * y_pos / 5) - 50, anchor="center")
+
+
+def stop_graph(win):
+    win.quit()
+    win.destroy()
 
 
 def view_progress(win):
-    pass
+    win.destroy()
+    progress = Tk()
+    progress.geometry(size)
+    progress.configure(bg=bgc)
+    progress.title("Personal Progress")
+    graph = Figure()
+    canvas = FigureCanvasTkAgg(graph, master=progress)
+    toolbar = NavigationToolbar2Tk(canvas, progress)
+    toolbar.update()
+    canvas.draw()
+    canvas.get_tk_widget().place(x=x_cord/2, y=y_cord/2, anchor='center')
+    Label(
+        progress,
+        text="This is your Progress",
+        bg=bgc,
+        fg=fgc,
+    ).place(x=x_cord/5,y=y_cord/5, anchor='center')
+    Button(
+        progress,
+        text="Back",
+        bg=bgc,
+        fg=fgc,
+        command=lambda: (stop_graph(progress), main_screen_user())
+    ).place(x=x_cord*9/10, y=y_cord/7, anchor='center')
+    db.retrieve_completed()
+
+    progress.mainloop()
 
 
 if __name__ == "__main__":

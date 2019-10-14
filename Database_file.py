@@ -83,6 +83,7 @@ class database:
         self.question_id = []
         self.answers = []
         self.question_details = []
+        self.personal_progress = []
 
     # Searches for a user in the database
     def search_user(self, target):
@@ -319,6 +320,22 @@ class database:
             self.quiz_details[self.current_test][1:3],
         )
         self.conn.execute(sql, vals)
+
+    def retrieve_completed(self):
+        self.conn.execute(
+            "SELECT USER_ID FROM USERS WHERE USERNAME='"
+            + self.current_user
+            + "'"
+        )
+        userID = str(self.conn.fetchone()[0])
+        self.personal_progress = []
+        self.conn.execute(
+            "SELECT SCORE, DATE_COMPLETED FROM ASSIGNED_QUIZ WHERE USER='"
+            + userID
+            + "'"
+        )
+        self.personal_progress = list(self.conn.fetchall())
+        print(self.personal_progress)
 
     # Establish a connection to the database
     def open_data(self):
