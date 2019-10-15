@@ -4,10 +4,9 @@ from tkinter import *
 from Database_file import *
 import time
 import random
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg, NavigationToolbar2Tk)
-from matplotlib.backend_bases import key_press_handler
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.figure import Figure
+import matplotlib.dates as dates
 import numpy as np
 
 # I am using tkinter as it is a simple GUI tool
@@ -824,6 +823,11 @@ def view_progress(win):
     progress.title("Personal Progress")
     graph = Figure()
     canvas = FigureCanvasTkAgg(graph, master=progress)
+    all_points = db.retrieve_completed()
+    for point in range(len(all_points)):
+        all_points[point][0] = dates.datestr2num(all_points[point][0])
+        print(all_points[point][0], all_points[point][1])
+        graph.add_subplot(221).plot(all_points[point][0], all_points[point][1], 'r+')
     toolbar = NavigationToolbar2Tk(canvas, progress)
     toolbar.update()
     canvas.draw()
@@ -843,8 +847,6 @@ def view_progress(win):
         font=def_font,
         command=lambda: (stop_graph(progress), main_screen_user())
     ).place(x=x_cord*9/10, y=y_cord/7, anchor='center')
-    print(db.retrieve_completed())
-
     progress.mainloop()
 
 

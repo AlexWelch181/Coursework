@@ -329,8 +329,10 @@ class database:
         )
         userID = str(self.conn.fetchone()[0])
         self.personal_progress = []
-        self.conn.execute("SELECT SCORE, DATE_COMPLETED FROM ASSIGNED_QUIZ WHERE USER='" + userID + "'AND COMPLETE = 1")
-        self.personal_progress = list(self.conn.fetchall())
+        self.conn.execute("SELECT DATE_COMPLETED, SCORE FROM ASSIGNED_QUIZ WHERE USER='" + userID + "'AND COMPLETE = 1")
+        for row in self.conn:
+            self.personal_progress.append(list(row))
+        print(self.personal_progress)
         return self.personal_progress
 
     # Establish a connection to the database
