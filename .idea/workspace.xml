@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1df29f0a-23bd-45a2-af99-ad9cdea860a0" name="Default Changelist" comment="Matplotlib embedding done">
-      <change beforePath="$PROJECT_DIR$/.idea/Coursework.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Coursework.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="1df29f0a-23bd-45a2-af99-ad9cdea860a0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Database_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_file.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,8 +30,8 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Git/cmd/git.exe" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -48,7 +45,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Main_file">
+  <component name="RunManager" selected="Python.Virtual Keyboard">
     <configuration name="Main_file" type="PythonConfigurationType" factoryName="Python">
       <module name="Coursework" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -62,6 +59,69 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Main_file.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Sympy test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Coursework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Sympy test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Virtual Keyboard" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Coursework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Virtual Keyboard.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sympy preview test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Coursework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="H:\Git Coursework\Coursework\Virtual Keyboard.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -94,9 +154,15 @@
     <list>
       <item itemvalue="Python.Main_file" />
       <item itemvalue="Python.test_sympy" />
+      <item itemvalue="Python.Sympy test" />
+      <item itemvalue="Python.sympy preview test" />
+      <item itemvalue="Python.Virtual Keyboard" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Virtual Keyboard" />
+        <item itemvalue="Python.sympy preview test" />
+        <item itemvalue="Python.Sympy test" />
         <item itemvalue="Python.test_sympy" />
       </list>
     </recent_temporary>
@@ -164,7 +230,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570799890534</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Matploylib has bugs due to percentage being taken as alpha parameter, look up on matplotlib.pyplot documentation">
+      <created>1571155729767</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1571155729767</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -202,7 +275,8 @@
     <MESSAGE value="Now checks if an answer has been inputted:&#10;however doesnt stop the loop,&#10;maybe use decorator" />
     <MESSAGE value="new update" />
     <MESSAGE value="Matplotlib embedding done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Matplotlib embedding done" />
+    <MESSAGE value="Matploylib has bugs due to percentage being taken as alpha parameter, look up on matplotlib.pyplot documentation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Matploylib has bugs due to percentage being taken as alpha parameter, look up on matplotlib.pyplot documentation" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

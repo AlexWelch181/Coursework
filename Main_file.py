@@ -4,10 +4,10 @@ from tkinter import *
 from Database_file import *
 import time
 import random
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-from matplotlib.figure import Figure
-import matplotlib.dates as dates
-import numpy as np
+# from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+# from matplotlib.figure import Figure
+# import matplotlib.dates as dates
+# import numpy as np
 
 # I am using tkinter as it is a simple GUI tool
 # I import my other file to handle my database functions
@@ -309,7 +309,7 @@ def create_quiz(win):
     quiz.geometry(size)
     quiz.configure(bg=bgc)
     quiz.resizable(False, False)
-    topic = Text(quiz, width=20, height=3)
+    topic = Text(quiz, width=20, height=4)
     topic.place(
         x=x_cord * 1 / 2, y=y_cord * 1 / 2, anchor="center"
     )
@@ -388,7 +388,7 @@ def create_question():
     question.geometry(size)
     question.configure(bg=bgc)
     question.resizable(False, False)
-    q_var = Text(question, width=25, height=4)
+    q_var = Text(question, width=45, height=5)
     ans_1 = Entry(question, justify="center", width=25)
     ans_2 = Entry(question, justify="center", width=25)
     ans_3 = Entry(question, justify="center", width=25)
