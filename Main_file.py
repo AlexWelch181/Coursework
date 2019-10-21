@@ -4,10 +4,9 @@ from tkinter import *
 from Database_file import *
 import time
 import random
-# from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-# from matplotlib.figure import Figure
-# import matplotlib.dates as dates
-# import numpy as np
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
 # I am using tkinter as it is a simple GUI tool
 # I import my other file to handle my database functions
@@ -93,10 +92,10 @@ def Login():
     ).place(
         x=x_cord * 1 / 2, y=y_cord * 1 / 5, anchor="center"
     )
-    User = Entry(
+    user = Entry(
         log, width=25, bg=bgc, fg=fgc, justify="center"
     )
-    Password = Entry(
+    password = Entry(
         log,
         show="*",
         width=25,
@@ -104,15 +103,15 @@ def Login():
         fg=fgc,
         justify="center",
     )
-    User.place(
+    user.place(
         x=x_cord * 3 / 5, y=y_cord * 2 / 5, anchor="center"
     )
-    Password.place(
+    password.place(
         x=x_cord * 3 / 5,
         y=y_cord * 2 / 5 + 50,
         anchor="center",
     )
-    data = [User, Password]
+    data = [user, password]
     Button(
         log,
         text="Login",
@@ -615,7 +614,8 @@ def end_test(win, score, question):
         text="Exit",
         fg=fgc,
         bg=bgc,
-        font=def_font
+        font=def_font,
+        command=lambda: main_screen_user()
     ).place(x=x_cord * 4 / 5, y=y_cord / 5, anchor='center')
     db.end_test(score, question)
     db.close_data()
@@ -814,22 +814,26 @@ def stop_graph(win):
     win.quit()
     win.destroy()
 
-
+# Shows the progress of the individual showing their past performance
 def view_progress(win):
     win.destroy()
     progress = Tk()
     progress.geometry(size)
     progress.configure(bg=bgc)
     progress.title("Personal Progress")
+    # using matplotlib to create the graph
     graph = Figure()
     canvas = FigureCanvasTkAgg(graph, master=progress)
     all_points = db.retrieve_completed()
+    # sort the points via date
+    all_points = sorted(all_points)
+    print(all_points)
+    x_points = []
+    y_points = []
     for point in range(len(all_points)):
-        all_points[point][0] = dates.datestr2num(all_points[point][0])
-        print(all_points[point][0], all_points[point][1])
-        graph.add_subplot(221).plot(all_points[point][0], all_points[point][1], 'r+')
-    toolbar = NavigationToolbar2Tk(canvas, progress)
-    toolbar.update()
+        x_points.append(all_points[point][0])
+        y_points.append(all_points[point][1])
+    graph.add_subplot(111).plot(x_points, y_points, 'bo')
     canvas.draw()
     canvas.get_tk_widget().place(x=x_cord/2, y=y_cord/2, anchor='center')
     Label(

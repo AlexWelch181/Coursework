@@ -170,9 +170,10 @@ class database:
 
     # This adds a question to the database
     def add_question(self, details):
-        timer = int(details[5].get())
+        timer = details[5].get()
         # checking that the timer is an integer and not any other input
-        if type(timer) == int:
+        if timer.isdigit():
+            timer = int(timer)
             sql = """INSERT INTO QUESTIONS(QUESTION_TEXT,TIMER) VALUES(%s,%s)"""
             q_text = details[0].get("1.0", 'end-1c')
             self.conn.execute(sql, [q_text, timer])
@@ -225,7 +226,7 @@ class database:
                 ]
                 self.conn.execute(sql, vals)
             sql = """INSERT INTO ASSIGNED_QUIZ(QUIZ_ASSIGNED,USER,COMPLETE,SCORE,DATE_COMPLETED,LATE) VALUES(%s,%s,%s,%s,%s,%s)"""
-            self.conn.execute("SELECT USER_ID FROM USERS")
+            self.conn.execute("SELECT USER_ID FROM USERS WHERE ADMIN=0")
             num_users = self.conn.fetchall()
             for user in range(len(num_users)):
                 vals = [
