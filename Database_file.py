@@ -3,7 +3,11 @@
 
 # This file is used to create the database class and execute all sql commands
 # I am using mysql to connect to my online database
-import mysql.connector
+import mysql.connector  # This is a main connection to the database
+import hashlib  # This is a hash library for my password storage
+import uuid  # This is a salting library to keep hashed passwords unique
+from datetime import date  # This allows me to collect the dates set
+from tkinter import messagebox  # This is a part of the tkinter module that creates pop-ups
 
 # Connecting to the host database
 mydb = mysql.connector.connect(
@@ -13,17 +17,7 @@ mydb = mysql.connector.connect(
     database="projectquiz",
 )
 
-import hashlib  # This is a hash library for my password storage
-import uuid  # This is a salting library to keep hashed passwords unique
-from datetime import (
-    date,
-)  # This allows me to collect the dates set
-from tkinter import (
-    messagebox,
-)  # This is a part of the tkinter module that creates pop-ups
-
-
-class database:
+class Database:
 
     # This initialises the database making sure all the tables are created
     def __init__(self):
@@ -71,7 +65,6 @@ class database:
        COMPLETE INT NOT NULL,
        SCORE  TEXT,
        DATE_COMPLETED TEXT,
-       LATE INT,
        FOREIGN KEY (QUIZ_ASSIGNED) REFERENCES QUIZ(QUIZ_ID),
        FOREIGN KEY (USER) REFERENCES USERS(USER_ID),
        PRIMARY KEY(QUIZ_ASSIGNED, USER));"""
@@ -142,7 +135,7 @@ class database:
 
     # This method makes sure the new account's password is encrypted and has a salt to make it even harder to crack
     def create_account(
-        self, user, password, conf_password, admin
+            self, user, password, conf_password, admin
     ):
         if admin == "True":
             admin = 1
@@ -225,7 +218,7 @@ class database:
                     q,
                 ]
                 self.conn.execute(sql, vals)
-            sql = """INSERT INTO ASSIGNED_QUIZ(QUIZ_ASSIGNED,USER,COMPLETE,SCORE,DATE_COMPLETED,LATE) VALUES(%s,%s,%s,%s,%s,%s)"""
+            sql = """INSERT INTO ASSIGNED_QUIZ(QUIZ_ASSIGNED,USER,COMPLETE,SCORE,DATE_COMPLETE) VALUES(%s,%s,%s,%s,%s)"""
             self.conn.execute("SELECT USER_ID FROM USERS WHERE ADMIN=0")
             num_users = self.conn.fetchall()
             for user in range(len(num_users)):
@@ -235,7 +228,6 @@ class database:
                     0,
                     0,
                     "N/A",
-                    0,
                 ]
                 self.conn.execute(sql, vals)
             self.current_questions = []
@@ -266,9 +258,9 @@ class database:
             quiz_data = self.conn.fetchall()
             for data in range(len(quiz_data[0])):
                 complete_quiz_data = (
-                    complete_quiz_data
-                    + " "
-                    + str(quiz_data[0][data])
+                        complete_quiz_data
+                        + " "
+                        + str(quiz_data[0][data])
                 )
                 if (data + 1) % 3 == 0:
                     if data != 0:
@@ -343,4 +335,3 @@ class database:
     # Save all the changes made to the database
     def close_data(self):
         mydb.commit()
-

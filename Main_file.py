@@ -4,9 +4,9 @@ from tkinter import *
 from Database_file import *
 import time
 import random
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
+# from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+# from matplotlib.figure import Figure
+# import matplotlib.pyplot as plt
 
 # I am using tkinter as it is a simple GUI tool
 # I import my other file to handle my database functions
@@ -26,25 +26,25 @@ def_font = ("Times New Roman", 20)
 # and then passing them as parameters to the database class methods
 
 
-def create_acc(vals, win):
+def create_acc(create_vals, win):
     db.open_data()
-    user = str(vals[0].get())
-    password = str(vals[1].get())
-    conf_password = str(vals[2].get())
-    admin = str(vals[3].get())
+    user = str(create_vals[0].get())
+    password = str(create_vals[1].get())
+    conf_password = str(create_vals[2].get())
+    admin = str(create_vals[3].get())
     db.create_account(user, password, conf_password, admin)
     db.close_data()
     win.destroy()
-    Login()
+    login()
 
 
 # Checks if the inputted password matches the user password on the database
 
 
-def login_check(vals, win):
+def login_check(login_vals, win):
     db.open_data()
-    user = str(vals[0].get())
-    password = str(vals[1].get())
+    user = str(login_vals[0].get())
+    password = str(login_vals[1].get())
     if db.search_user(user):
         if db.search_password(password, user):
             win.destroy()
@@ -68,16 +68,16 @@ def login_check(vals, win):
 # This is the login form for the website, it passes the inputs into the database and validates them
 
 
-def Login():
+def login():
     log = Tk()
     log.geometry(size)
     log.resizable(False, False)
     log.configure(bg=bgc)
     log.title("Maths Quiz~Alex Welch")
-    Lbls = ["Username", "Password"]
-    for x in range(len(Lbls)):
+    lbls = ["Username", "Password"]
+    for x in range(len(lbls)):
         Label(
-            log, text=Lbls[x], bg=bgc, fg=fgc, font=def_font
+            log, text=lbls[x], bg=bgc, fg=fgc, font=def_font
         ).place(
             x=x_cord * 1 / 3,
             y=y_cord * 2 / 5 + 50 * x,
@@ -117,6 +117,8 @@ def Login():
         text="Login",
         bg=bgc,
         fg=fgc,
+        width=20,
+        height=3,
         command=lambda: login_check(data, log),
     ).place(
         x=x_cord * 1 / 2, y=y_cord * 5 / 7, anchor="center"
@@ -126,18 +128,11 @@ def Login():
         text="Exit",
         bg=bgc,
         fg=fgc,
+        width=20,
+        height=3,
         command=lambda: log.destroy(),
     ).place(
         x=x_cord * 1 / 2, y=y_cord * 4 / 5, anchor="center"
-    )
-    Button(
-        log,
-        text="Temporary",
-        bg=bgc,
-        fg=fgc,
-        command=lambda: register(log),
-    ).place(
-        x=x_cord * 1 / 2, y=y_cord * 6 / 7, anchor="center"
     )
     log.mainloop()
 
@@ -169,6 +164,8 @@ def main_screen_admin():
         text="Make new account",
         bg=bgc,
         fg=fgc,
+        width=20,
+        height=3,
         command=lambda: register(main_win),
     ).place(
         x=x_cord * 1 / 2, y=y_cord * 4 / 5, anchor="center"
@@ -179,7 +176,9 @@ def main_screen_admin():
         text="Log Out",
         bg=bgc,
         fg=fgc,
-        command=lambda: (main_win.destroy(), Login()),
+        width=20,
+        height=3,
+        command=lambda: (main_win.destroy(), login()),
     ).place(
         x=x_cord * 1 / 2, y=y_cord * 9 / 10, anchor="center"
     )
@@ -217,15 +216,15 @@ def register(win):
     reg.geometry(size)
     reg.resizable(False, False)
     reg.configure(bg=bgc)
-    Lbls = [
+    lbls = [
         "Username",
         "Password",
         "Confirm Password",
         "Admin",
     ]
-    for x in range(len(Lbls)):
+    for x in range(len(lbls)):
         Label(
-            reg, text=Lbls[x], bg=bgc, fg=fgc, font=def_font
+            reg, text=lbls[x], bg=bgc, fg=fgc, font=def_font
         ).place(
             x=x_cord * 1 / 3,
             y=y_cord * 2 / 5 + 50 * x,
@@ -312,18 +311,18 @@ def create_quiz(win):
     topic.place(
         x=x_cord * 1 / 2, y=y_cord * 1 / 2, anchor="center"
     )
-    Lbls = [
+    lbls = [
         "Create a quiz",
         "Give the quiz a name and the topic it is based on",
         "Use the plus Icon to add a question",
         "Then give 4 answers for the student to select from",
     ]
-    for lbl in range(len(Lbls)):
+    for lbl in range(len(lbls)):
         Label(
             quiz,
             bg=bgc,
             fg=fgc,
-            text=Lbls[lbl],
+            text=lbls[lbl],
             font=def_font,
         ).place(
             x=x_cord * 1 / 2,
@@ -387,13 +386,13 @@ def create_question():
     question.geometry(size)
     question.configure(bg=bgc)
     question.resizable(False, False)
-    q_var = Text(question, width=45, height=5)
-    ans_1 = Entry(question, justify="center", width=25)
-    ans_2 = Entry(question, justify="center", width=25)
-    ans_3 = Entry(question, justify="center", width=25)
-    ans_4 = Entry(question, justify="center", width=25)
-    timer = Entry(question, justify="center", width=25)
-    q_details = [q_var, ans_1, ans_2, ans_3, ans_4, timer]
+    q_var_ent = Text(question, width=45, height=5)
+    ans_1_ent = Entry(question, justify="center", width=25)
+    ans_2_ent = Entry(question, justify="center", width=25)
+    ans_3_ent = Entry(question, justify="center", width=25)
+    ans_4_ent = Entry(question, justify="center", width=25)
+    timer_ent = Entry(question, justify="center", width=25)
+    q_details = [q_var_ent, ans_1_ent, ans_2_ent, ans_3_ent, ans_4_ent, timer_ent]
     lbls = [
         "Enter the Question here",
         "Enter correct answer here",
@@ -443,6 +442,8 @@ def create_question():
         text="Create\nQuestion",
         bg=bgc,
         fg=fgc,
+        width=20,
+        height=3,
         command=lambda: (
             db.open_data(),
             db.add_question(q_details),
@@ -455,6 +456,8 @@ def create_question():
         text="Back",
         bg=bgc,
         fg=fgc,
+        width=20,
+        height=3,
         command=lambda: question.destroy(),
     )
     add_q_btn.place(
@@ -516,7 +519,9 @@ def main_screen_user():
         text="Log Out",
         bg=bgc,
         fg=fgc,
-        command=lambda: (main_win.destroy(), Login()),
+        width=20,
+        height=3,
+        command=lambda: (main_win.destroy(), login()),
     ).place(
         x=x_cord * 1 / 2, y=y_cord * 5 / 6, anchor="center"
     )
@@ -800,8 +805,8 @@ def complete_quiz(win):
         Button(
             quiz_area,
             text="Complete This Quiz",
-            command=lambda data=data: (
-                db.start_test(data),
+            command=lambda selected_quiz = data: (
+                db.start_test(selected_quiz),
                 quiz_active(quiz, quiz_area),
             ),
             bg=bgc,
@@ -855,6 +860,6 @@ def view_progress(win):
 
 
 if __name__ == "__main__":
-    db = database()
+    db = Database()
     submit_ans.has_been_called = False
-    Login()
+    login()
