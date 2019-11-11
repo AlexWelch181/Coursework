@@ -175,8 +175,8 @@ class Database:
                 + q_text
                 + "'"
             )
-            ID = self.conn.fetchone()[0]
-            self.current_questions.append(ID)
+            question_id = self.conn.fetchone()[0]
+            self.current_questions.append(question_id)
             for answer in range(1, 5):
                 if answer == 1:
                     correct = 1
@@ -186,7 +186,7 @@ class Database:
                 vals = [
                     str(details[answer].get()),
                     correct,
-                    ID,
+                    question_id,
                 ]
                 self.conn.execute(sql, vals)
         else:
@@ -218,7 +218,8 @@ class Database:
                     q,
                 ]
                 self.conn.execute(sql, vals)
-            sql = """INSERT INTO ASSIGNED_QUIZ(QUIZ_ASSIGNED,USER,COMPLETE,SCORE,DATE_COMPLETE) VALUES(%s,%s,%s,%s,%s)"""
+            sql = """INSERT INTO ASSIGNED_QUIZ(QUIZ_ASSIGNED,USER,COMPLETE,SCORE,DATE_COMPLETED) VALUES(%s,%s,%s,%s,
+            %s) """
             self.conn.execute("SELECT USER_ID FROM USERS WHERE ADMIN=0")
             num_users = self.conn.fetchall()
             for user in range(len(num_users)):
@@ -239,10 +240,10 @@ class Database:
             + self.current_user
             + "'"
         )
-        userID = str(self.conn.fetchone()[0])
+        user_id = str(self.conn.fetchone()[0])
         self.conn.execute(
             "SELECT QUIZ_ASSIGNED FROM ASSIGNED_QUIZ WHERE USER='"
-            + userID
+            + user_id
             + "' AND COMPLETE='"
             + str(complete)
             + "'"
@@ -258,9 +259,7 @@ class Database:
             quiz_data = self.conn.fetchall()
             for data in range(len(quiz_data[0])):
                 complete_quiz_data = (
-                        complete_quiz_data
-                        + " "
-                        + str(quiz_data[0][data])
+                        complete_quiz_data + " " + str(quiz_data[0][data])
                 )
                 if (data + 1) % 3 == 0:
                     if data != 0:
@@ -302,31 +301,42 @@ class Database:
             + self.current_user
             + "'"
         )
-        userID = str(self.conn.fetchone()[0])
+        user_id = str(self.conn.fetchone()[0])
         percentage = str((score / question) * 100)
         sql = "UPDATE ASSIGNED_QUIZ SET COMPLETE = %s, SCORE = %s, DATE_COMPLETED = %s WHERE USER = %s AND QUIZ_ASSIGNED = %s"
         vals = (
             1,
             str(percentage),
             str(date.today()),
-            userID,
+            user_id,
             self.quiz_details[self.current_test][1:3],
         )
         self.conn.execute(sql, vals)
 
-    def retrieve_completed(self):
-        self.conn.execute(
-            "SELECT USER_ID FROM USERS WHERE USERNAME='"
-            + self.current_user
-            + "'"
-        )
-        userID = str(self.conn.fetchone()[0])
-        self.personal_progress = []
-        self.conn.execute("SELECT DATE_COMPLETED, SCORE FROM ASSIGNED_QUIZ WHERE USER='" + userID + "'AND COMPLETE = 1")
-        for row in self.conn:
-            self.personal_progress.append(list(row))
-        print(self.personal_progress)
-        return self.personal_progress
+    def retrieve_completed(self, type):
+        if type == 1:
+            self.conn.execute(
+                "SELECT USER_ID FROM USERS WHERE USERNAME='"
+                + self.current_user
+                + "'"
+            )
+            user_id = str(self.conn.fetchone()[0])
+            self.conn.execute("SELECT QUIZ_ASSIGNED FROM ASSIGNED_QUIZ WHERE USER='" + user_id + "'AND COMPLETE = 1")
+            quizzes_completed = self.conn.fetchall()
+            dates_set = []
+            for quiz_id in range(len(quizzes_completed)):
+                self.conn.execute("SELECT DATE_SET FROM QUIZ WHERE QUIZ_ID='" + str(quizzes_completed[quiz_id][0]) + "'")
+                dates_set.append(self.conn.fetchone())
+            self.personal_progress = []
+            self.conn.execute("SELECT SCORE FROM ASSIGNED_QUIZ WHERE USER='" + user_id + "'AND COMPLETE = 1")
+            for row in self.conn:
+                self.personal_progress.append(list(row))
+            for date in range(len(self.personal_progress)):
+                self.personal_progress[date].append(dates_set[date][0])
+            print(self.personal_progress)
+            return self.personal_progress
+       # elif type == 2:
+            # self.conn.execute()
 
     # Establish a connection to the database
     def open_data(self):

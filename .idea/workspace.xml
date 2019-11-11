@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1df29f0a-23bd-45a2-af99-ad9cdea860a0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Database_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_file.py" afterDir="false" />
@@ -92,6 +91,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Sympy" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Coursework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="H:\Git Coursework\Coursework\Keyboard.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Virtual Keyboard" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Coursework" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -161,9 +181,11 @@
       <item itemvalue="Python.Sympy test" />
       <item itemvalue="Python.sympy preview test" />
       <item itemvalue="Python.Virtual Keyboard" />
+      <item itemvalue="Python.Sympy" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Sympy" />
         <item itemvalue="Python.Virtual Keyboard" />
         <item itemvalue="Python.sympy preview test" />
         <item itemvalue="Python.Sympy test" />
@@ -255,7 +277,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571649408095</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="naming convention fixed">
+      <created>1571652347181</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1571652347181</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -296,7 +325,8 @@
     <MESSAGE value="Matploylib has bugs due to percentage being taken as alpha parameter, look up on matplotlib.pyplot documentation" />
     <MESSAGE value="virtual keyboard created&#10;some formatting changes" />
     <MESSAGE value="not using virtual keyboard" />
-    <option name="LAST_COMMIT_MESSAGE" value="not using virtual keyboard" />
+    <MESSAGE value="naming convention fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="naming convention fixed" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
