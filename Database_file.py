@@ -9,74 +9,92 @@ import uuid  # This is a salting library to keep hashed passwords unique
 from datetime import date  # This allows me to collect the dates set
 from tkinter import messagebox  # This is a part of the tkinter module that creates pop-ups
 
-# Connecting to the host database
+# Connecting to the host database#
+
 mydb = mysql.connector.connect(
     host="db4free.net",
     user="alex_welch",
     passwd="A1exandm3",
-    database="projectquiz",
-)
+    database='projectquiz')
+
 
 class Database:
 
     # This initialises the database making sure all the tables are created
     def __init__(self):
-        self.conn = mydb.cursor()
-        self.conn.execute(
-            """CREATE TABLE IF NOT EXISTS USERS
-       (USER_ID INT AUTO_INCREMENT PRIMARY KEY ,
-       USERNAME     TEXT    NOT NULL,
-       ENCRYPT_PASS TEXT   NOT NULL,
-       SALT_VAL    TEXT    NOT NULL,
-       ADMIN       INTEGER NOT NULL);"""
-        )
-        self.conn.execute(
-            """CREATE TABLE IF NOT EXISTS QUIZ
-       (QUIZ_ID INT AUTO_INCREMENT PRIMARY KEY,
-       TOPIC TEXT   NOT NULL,
-       DATE_SET TEXT NOT NULL);"""
-        )
-        self.conn.execute(
-            """CREATE TABLE IF NOT EXISTS QUESTIONS
-       (QUESTION_ID INT AUTO_INCREMENT PRIMARY KEY,
-       QUESTION_TEXT TEXT   NOT NULL,
-       TIMER        INT     NOT NULL);"""
-        )
-        self.conn.execute(
-            """CREATE TABLE IF NOT EXISTS ANSWERS
-       (ANSWER_ID INT AUTO_INCREMENT PRIMARY KEY,
-       ANSWER_TEXT TEXT NOT NULL,
-       CORRECT INTEGER NOT NULL,
-       PARENT_QUESTION INT NOT NULL,
-       FOREIGN KEY (PARENT_QUESTION) REFERENCES QUESTIONS(QUESTION_ID));"""
-        )
-        self.conn.execute(
-            """CREATE TABLE IF NOT EXISTS QUIZ_QUESTIONS
-       (QUIZ_NUM INT,
-        QUESTION_NUM INT,
-        QUESTION_NUMBER INT NOT NULL,
-        FOREIGN KEY (QUIZ_NUM) REFERENCES QUIZ(QUIZ_ID),
-        FOREIGN KEY (QUESTION_NUM) REFERENCES QUESTIONS(QUESTION_ID));"""
-        )
-        self.conn.execute(
-            """CREATE TABLE IF NOT EXISTS ASSIGNED_QUIZ
-       (QUIZ_ASSIGNED INT NOT NULL,
-       USER INT NOT NULL,
-       COMPLETE INT NOT NULL,
-       SCORE  TEXT,
-       DATE_COMPLETED TEXT,
-       FOREIGN KEY (QUIZ_ASSIGNED) REFERENCES QUIZ(QUIZ_ID),
-       FOREIGN KEY (USER) REFERENCES USERS(USER_ID),
-       PRIMARY KEY(QUIZ_ASSIGNED, USER));"""
-        )
-        mydb.commit()
-        self.current_questions = []
-        self.current_user = ""
-        self.quiz_details = []
-        self.question_id = []
-        self.answers = []
-        self.question_details = []
-        self.personal_progress = []
+        self.success = False
+        tries = 0
+        while not self.success:
+            try:
+                self.conn = mydb.cursor()
+                self.conn.execute(
+                    """CREATE TABLE IF NOT EXISTS USERS
+               (USER_ID INT AUTO_INCREMENT PRIMARY KEY ,
+               USERNAME     TEXT    NOT NULL,
+               ENCRYPT_PASS TEXT   NOT NULL,
+               SALT_VAL    TEXT    NOT NULL,
+               ADMIN       INTEGER NOT NULL);"""
+                )
+                self.conn.execute(
+                    """CREATE TABLE IF NOT EXISTS QUIZ
+               (QUIZ_ID INT AUTO_INCREMENT PRIMARY KEY,
+               TOPIC TEXT   NOT NULL,
+               DATE_SET TEXT NOT NULL);"""
+                )
+                self.conn.execute(
+                    """CREATE TABLE IF NOT EXISTS QUESTIONS
+               (QUESTION_ID INT AUTO_INCREMENT PRIMARY KEY,
+               QUESTION_TEXT TEXT   NOT NULL,
+               TIMER        INT     NOT NULL);"""
+                )
+                self.conn.execute(
+                    """CREATE TABLE IF NOT EXISTS ANSWERS
+               (ANSWER_ID INT AUTO_INCREMENT PRIMARY KEY,
+               ANSWER_TEXT TEXT NOT NULL,
+               CORRECT INTEGER NOT NULL,
+               PARENT_QUESTION INT NOT NULL,
+               FOREIGN KEY (PARENT_QUESTION) REFERENCES QUESTIONS(QUESTION_ID));"""
+                )
+                self.conn.execute(
+                    """CREATE TABLE IF NOT EXISTS QUIZ_QUESTIONS
+               (QUIZ_NUM INT,
+                QUESTION_NUM INT,
+                QUESTION_NUMBER INT NOT NULL,
+                FOREIGN KEY (QUIZ_NUM) REFERENCES QUIZ(QUIZ_ID),
+                FOREIGN KEY (QUESTION_NUM) REFERENCES QUESTIONS(QUESTION_ID));"""
+                )
+                self.conn.execute(
+                    """CREATE TABLE IF NOT EXISTS ASSIGNED_QUIZ
+               (QUIZ_ASSIGNED INT NOT NULL,
+               USER INT NOT NULL,
+               COMPLETE INT NOT NULL,
+               SCORE  TEXT,
+               DATE_COMPLETED TEXT,
+               FOREIGN KEY (QUIZ_ASSIGNED) REFERENCES QUIZ(QUIZ_ID),
+               FOREIGN KEY (USER) REFERENCES USERS(USER_ID),
+               PRIMARY KEY(QUIZ_ASSIGNED, USER));"""
+                )
+                mydb.commit()
+                self.current_questions = []
+                self.current_user = ""
+                self.current_test = None
+                self.quiz_details = []
+                self.question_id = []
+                self.answers = []
+                self.question_details = []
+                self.personal_progress = []
+                self.success = True
+            except ConnectionRefusedError:
+                tries += 1
+                if tries == 3:
+                    messagebox.showerror('Max Attempts Reached',
+                                         'The max amount of attempts have been reached please try again later')
+                else:
+                    msgbox = messagebox.askquestion(
+                        'Try Again?", "It seems there was an error with the connection to the server'
+                        '\nWould you like to try again?', icon='warning')
+                    if msgbox == 'no':
+                        exit()
 
     # Searches for a user in the database
     def search_user(self, target):
@@ -303,7 +321,8 @@ class Database:
         )
         user_id = str(self.conn.fetchone()[0])
         percentage = str((score / question) * 100)
-        sql = "UPDATE ASSIGNED_QUIZ SET COMPLETE = %s, SCORE = %s, DATE_COMPLETED = %s WHERE USER = %s AND QUIZ_ASSIGNED = %s"
+        sql = "UPDATE ASSIGNED_QUIZ SET COMPLETE = %s, SCORE = %s, DATE_COMPLETED = %s WHERE USER = %s AND " \
+              "QUIZ_ASSIGNED = %s "
         vals = (
             1,
             str(percentage),
@@ -313,8 +332,8 @@ class Database:
         )
         self.conn.execute(sql, vals)
 
-    def retrieve_completed(self, type):
-        if type == 1:
+    def retrieve_completed(self, query_type):
+        if query_type == 1:
             self.conn.execute(
                 "SELECT USER_ID FROM USERS WHERE USERNAME='"
                 + self.current_user
@@ -325,7 +344,8 @@ class Database:
             quizzes_completed = self.conn.fetchall()
             dates_set = []
             for quiz_id in range(len(quizzes_completed)):
-                self.conn.execute("SELECT DATE_SET FROM QUIZ WHERE QUIZ_ID='" + str(quizzes_completed[quiz_id][0]) + "'")
+                self.conn.execute(
+                    "SELECT DATE_SET FROM QUIZ WHERE QUIZ_ID='" + str(quizzes_completed[quiz_id][0]) + "'")
                 dates_set.append(self.conn.fetchone())
             self.personal_progress = []
             self.conn.execute("SELECT SCORE FROM ASSIGNED_QUIZ WHERE USER='" + user_id + "'AND COMPLETE = 1")
@@ -335,8 +355,10 @@ class Database:
                 self.personal_progress[date].append(dates_set[date][0])
             print(self.personal_progress)
             return self.personal_progress
-       # elif type == 2:
-            # self.conn.execute()
+        # elif type == 2:
+        # self.conn.execute()
+        else:
+            pass
 
     # Establish a connection to the database
     def open_data(self):

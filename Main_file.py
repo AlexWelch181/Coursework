@@ -4,8 +4,11 @@ from tkinter import *
 from Database_file import *
 import time
 import random
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-from matplotlib.figure import Figure
+
+# from pandas import DataFrame
+# from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
+# from matplotlib.figure import Figure
+# import matplotlib.pyplot as plt
 
 # I am using tkinter as it is a simple GUI tool
 # I import my other file to handle my database functions
@@ -459,6 +462,15 @@ def create_question():
         height=3,
         command=lambda: question.destroy(),
     )
+    superscript_btn = Button(
+        question,
+        text='²',
+        bg=bgc,
+        fg=fgc,
+        width=20,
+        height=3,
+        command=lambda: [question.focus_get()]
+    )
     add_q_btn.place(
         x=x_cord * 5 / 6, y=y_cord * 1 / 3, anchor="center"
     )
@@ -804,7 +816,7 @@ def complete_quiz(win):
         Button(
             quiz_area,
             text="Complete This Quiz",
-            command=lambda selected_quiz = data: (
+            command=lambda selected_quiz=data: (
                 db.start_test(selected_quiz),
                 quiz_active(quiz, quiz_area),
             ),
@@ -818,6 +830,7 @@ def stop_graph(win):
     win.quit()
     win.destroy()
 
+
 # Shows the progress of the individual showing their past performance
 def view_progress(win):
     win.destroy()
@@ -830,16 +843,18 @@ def view_progress(win):
     canvas_scores = FigureCanvasTkAgg(scores_over_time, master=progress)
     all_points = db.retrieve_completed(1)
     # sort the points via date
-    all_points = sorted(all_points)
     print(all_points)
     x_points = []
     y_points = []
     for point in range(len(all_points)):
         x_points.append(all_points[point][1])
         y_points.append(all_points[point][0])
+    data = {'Date': x_points,
+            'Percentage': y_points
+            }
     scores_over_time.add_subplot(111).plot(x_points, y_points, 'bo')
     canvas_scores.draw()
-    canvas_scores.get_tk_widget().place(x=x_cord/4, y=y_cord/4, anchor='center')
+    canvas_scores.get_tk_widget().place(x=x_cord / 4, y=y_cord / 4, anchor='center')
     scores_compared_to_average = Figure(figsize=(4, 3))
     canvas_scores_average = FigureCanvasTkAgg(scores_compared_to_average, master=progress)
     all_points = db.retrieve_completed(2)
@@ -849,7 +864,7 @@ def view_progress(win):
         bg=bgc,
         fg=fgc,
         font=def_font,
-    ).place(x=x_cord/2, y=(y_cord/10)-50, anchor='center')
+    ).place(x=x_cord / 2, y=(y_cord / 10) - 50, anchor='center')
     Button(
         progress,
         text="Back",
@@ -857,7 +872,7 @@ def view_progress(win):
         fg=fgc,
         font=def_font,
         command=lambda: (stop_graph(progress), main_screen_user())
-    ).place(x=x_cord*9/10, y=y_cord/7, anchor='center')
+    ).place(x=x_cord * 9 / 10, y=y_cord / 7, anchor='center')
     progress.mainloop()
 
 
