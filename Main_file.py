@@ -6,9 +6,9 @@ import time
 import random
 
 # from pandas import DataFrame
-# from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
-# from matplotlib.figure import Figure
-# import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
 # I am using tkinter as it is a simple GUI tool
 # I import my other file to handle my database functions
@@ -339,7 +339,7 @@ def create_quiz(win):
         font=("System", 10),
         width=10,
         height=2,
-        command=lambda: create_question(),
+        command=lambda: [quiz.destroy(), create_question()]
     )
     exit = Button(
         quiz,
@@ -389,11 +389,11 @@ def create_question():
     question.configure(bg=bgc)
     question.resizable(False, False)
     q_var_ent = Text(question, width=45, height=5)
-    ans_1_ent = Entry(question, justify="center", width=25)
-    ans_2_ent = Entry(question, justify="center", width=25)
-    ans_3_ent = Entry(question, justify="center", width=25)
-    ans_4_ent = Entry(question, justify="center", width=25)
-    timer_ent = Entry(question, justify="center", width=25)
+    ans_1_ent = Text(question, width=25, height=1)
+    ans_2_ent = Text(question, width=25, height=1)
+    ans_3_ent = Text(question, width=25, height=1)
+    ans_4_ent = Text(question, width=25, height=1)
+    timer_ent = Text(question, width=25, height=1)
     q_details = [q_var_ent, ans_1_ent, ans_2_ent, ans_3_ent, ans_4_ent, timer_ent]
     lbls = [
         "Enter the Question here",
@@ -450,7 +450,7 @@ def create_question():
             db.open_data(),
             db.add_question(q_details),
             db.close_data(),
-            question.destroy(),
+            create_quiz(question),
         ),
     )
     delete_q_btn = Button(
@@ -460,7 +460,7 @@ def create_question():
         fg=fgc,
         width=20,
         height=3,
-        command=lambda: question.destroy(),
+        command=lambda: create_quiz(question)
     )
     superscript_btn = Button(
         question,
@@ -469,7 +469,7 @@ def create_question():
         fg=fgc,
         width=20,
         height=3,
-        command=lambda: [question.focus_get()]
+        command=lambda: change_offset(question)
     )
     add_q_btn.place(
         x=x_cord * 5 / 6, y=y_cord * 1 / 3, anchor="center"
@@ -477,7 +477,29 @@ def create_question():
     delete_q_btn.place(
         x=x_cord * 5 / 6, y=y_cord * 2 / 3, anchor="center"
     )
+    superscript_btn.place(
+        x=x_cord * 5 / 6, y=y_cord * 1 / 5, anchor="center"
+    )
+    question.mainloop()
 
+def change_offset(root):
+    entry_box = root.focus_get()
+    entry_box.tag_configure('superscript', offset=4)
+    superscript_ins = Tk()
+    superscript_ins.geometry('300x400')
+    superscript_ins.configure(bg=bgc)
+    Label(superscript_ins, text='Insert the text that you would like as superscript',
+          bg=bgc, fg=fgc).place(x=150, y=100, anchor='center')
+    ent = Entry(superscript_ins)
+    ent.place(x=150, y=200, anchor='center')
+    enter_btn = Button(
+        superscript_ins,
+        text='Enter',
+        bg=bgc,
+        fg=fgc,
+        command=lambda: [entry_box.insert('insert', ent.get(), 'superscript'), superscript_ins.destroy()]
+    )
+    enter_btn.place(x=150, y=350, anchor='center')
 
 # This the main screen for the students, they can complete quizzes or view their progress
 def main_screen_user():
@@ -848,7 +870,7 @@ def view_progress(win):
     y_points = []
     for point in range(len(all_points)):
         x_points.append(all_points[point][1])
-        y_points.append(all_points[point][0])
+        y_points.append("HW"+str(point))
     data = {'Date': x_points,
             'Percentage': y_points
             }
