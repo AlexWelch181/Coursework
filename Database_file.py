@@ -181,7 +181,7 @@ class Database:
 
     # This adds a question to the database
     def add_question(self, details):
-        timer = details[5].get()
+        timer = details[5].get('1.0', 'end-1c')
         # checking that the timer is an integer and not any other input
         if timer.isdigit():
             timer = int(timer)
@@ -202,7 +202,7 @@ class Database:
                     correct = 0
                 sql = """INSERT INTO ANSWERS(ANSWER_TEXT,CORRECT,PARENT_QUESTION) VALUES(%s,%s,%s)"""
                 vals = [
-                    str(details[answer].get()),
+                    str(details[answer].get('1.0', 'end-1c')),
                     correct,
                     question_id,
                 ]

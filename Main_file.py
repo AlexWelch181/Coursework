@@ -861,22 +861,19 @@ def view_progress(win):
     progress.configure(bg=bgc)
     progress.title("Personal Progress")
     # using matplotlib to create the graph
-    scores_over_time = Figure(figsize=(4, 3))
-    canvas_scores = FigureCanvasTkAgg(scores_over_time, master=progress)
     all_points = db.retrieve_completed(1)
-    # sort the points via date
-    print(all_points)
-    x_points = []
-    y_points = []
+    renamed_points = []
     for point in range(len(all_points)):
-        x_points.append(all_points[point][1])
-        y_points.append("HW"+str(point))
-    data = {'Date': x_points,
-            'Percentage': y_points
-            }
-    scores_over_time.add_subplot(111).plot(x_points, y_points, 'bo')
+        renamed_points.append([float(all_points[point][0]), point])
+    x_points, y_points = bubble_sorting_data(renamed_points)
+    scores_over_time = Figure(figsize=(len(x_points), len(y_points)), dpi=100)
+    canvas_scores = FigureCanvasTkAgg(scores_over_time, master=progress)
+    ax = scores_over_time.add_subplot(111)
+    ax.set_xlabel('Homework-Number')
+    ax.set_ylabel('Percentage %')
+    rects = ax.bar(x_points, y_points, 0.5)
     canvas_scores.draw()
-    canvas_scores.get_tk_widget().place(x=x_cord / 4, y=y_cord / 4, anchor='center')
+    canvas_scores.get_tk_widget().place(x=x_cord / 4, y=(y_cord / 4)+25, anchor='center')
     scores_compared_to_average = Figure(figsize=(4, 3))
     canvas_scores_average = FigureCanvasTkAgg(scores_compared_to_average, master=progress)
     all_points = db.retrieve_completed(2)
@@ -896,6 +893,23 @@ def view_progress(win):
         command=lambda: (stop_graph(progress), main_screen_user())
     ).place(x=x_cord * 9 / 10, y=y_cord / 7, anchor='center')
     progress.mainloop()
+
+def bubble_sorting_data(graph_data):
+    for it in range(len(graph_data)):
+        for sub_it in range(len(graph_data)-1):
+            try:
+                if graph_data[sub_it][0] > graph_data[sub_it+1][0]:
+                    temp = graph_data[sub_it]
+                    graph_data[sub_it] = graph_data[sub_it + 1]
+                    graph_data[sub_it + 1] = temp
+            except:
+                pass
+    x_points = []
+    y_points = []
+    for size in range(len(graph_data)):
+        y_points.append(graph_data[size][0])
+        x_points.append(graph_data[size][1])
+    return x_points, y_points
 
 
 if __name__ == "__main__":
