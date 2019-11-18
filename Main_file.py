@@ -5,10 +5,9 @@ from Database_file import *
 import time
 import random
 
-# from pandas import DataFrame
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
+# from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
+# from matplotlib.figure import Figure
+# import matplotlib.pyplot as plt
 
 # I am using tkinter as it is a simple GUI tool
 # I import my other file to handle my database functions
@@ -482,9 +481,9 @@ def create_question():
     )
     question.mainloop()
 
+
 def change_offset(root):
     entry_box = root.focus_get()
-    entry_box.tag_configure('superscript', offset=4)
     superscript_ins = Tk()
     superscript_ins.geometry('300x400')
     superscript_ins.configure(bg=bgc)
@@ -497,9 +496,39 @@ def change_offset(root):
         text='Enter',
         bg=bgc,
         fg=fgc,
-        command=lambda: [entry_box.insert('insert', ent.get(), 'superscript'), superscript_ins.destroy()]
+        command=lambda: [entry_box.insert('insert', to_sup(ent.get())), superscript_ins.destroy()]
     )
     enter_btn.place(x=150, y=350, anchor='center')
+
+
+def to_sup(s):
+    sups = {'1': u'\xb9',
+            '0': u'\u2070',
+            '3': u'\xb3',
+            '2': u'\xb2',
+            '5': u'\u2075',
+            '4': u'\u2074',
+            '7': u'\u2077',
+            '6': u'\u2076',
+            '9': u'\u2079',
+            '8': u'\u2078',
+            '+': u'\u207a',
+            '-': u'\u207b',
+            'i': u'\u2071'}
+    for characters in range(len(s)):
+        counter = 0
+        found = False
+        for super_version in sups:
+            counter += 1
+            print(s[characters], super_version)
+            if s[characters] == super_version:
+                found = True
+                pass
+            if counter == len(sups) and not found:
+                messagebox.showerror('Error', 'Character not found')
+                return ""
+    return ''.join([sups[i] for i in s])
+
 
 # This the main screen for the students, they can complete quizzes or view their progress
 def main_screen_user():
@@ -873,7 +902,7 @@ def view_progress(win):
     ax.set_ylabel('Percentage %')
     rects = ax.bar(x_points, y_points, 0.5)
     canvas_scores.draw()
-    canvas_scores.get_tk_widget().place(x=x_cord / 4, y=(y_cord / 4)+25, anchor='center')
+    canvas_scores.get_tk_widget().place(x=x_cord / 4, y=(y_cord / 4) + 25, anchor='center')
     scores_compared_to_average = Figure(figsize=(4, 3))
     canvas_scores_average = FigureCanvasTkAgg(scores_compared_to_average, master=progress)
     all_points = db.retrieve_completed(2)
@@ -894,11 +923,12 @@ def view_progress(win):
     ).place(x=x_cord * 9 / 10, y=y_cord / 7, anchor='center')
     progress.mainloop()
 
+
 def bubble_sorting_data(graph_data):
     for it in range(len(graph_data)):
-        for sub_it in range(len(graph_data)-1):
+        for sub_it in range(len(graph_data) - 1):
             try:
-                if graph_data[sub_it][0] > graph_data[sub_it+1][0]:
+                if graph_data[sub_it][0] > graph_data[sub_it + 1][0]:
                     temp = graph_data[sub_it]
                     graph_data[sub_it] = graph_data[sub_it + 1]
                     graph_data[sub_it + 1] = temp
