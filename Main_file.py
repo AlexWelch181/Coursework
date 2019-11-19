@@ -5,9 +5,9 @@ from Database_file import *
 import time
 import random
 
-# from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
-# from matplotlib.figure import Figure
-# import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+from matplotlib.ticker import MaxNLocator
 
 # I am using tkinter as it is a simple GUI tool
 # I import my other file to handle my database functions
@@ -520,7 +520,6 @@ def to_sup(s):
         found = False
         for super_version in sups:
             counter += 1
-            print(s[characters], super_version)
             if s[characters] == super_version:
                 found = True
                 pass
@@ -528,6 +527,33 @@ def to_sup(s):
                 messagebox.showerror('Error', 'Character not found')
                 return ""
     return ''.join([sups[i] for i in s])
+
+def to_sub(s):
+    subs = {'1': u'\xb9',
+            '0': u'\u2070',
+            '3': u'\xb3',
+            '2': u'\xb2',
+            '5': u'\u2075',
+            '4': u'\u2074',
+            '7': u'\u2077',
+            '6': u'\u2076',
+            '9': u'\u2079',
+            '8': u'\u2078',
+            '+': u'\u207a',
+            '-': u'\u207b',
+            'i': u'\u2071'}
+    for characters in range(len(s)):
+        counter = 0
+        found = False
+        for super_version in subs:
+            counter += 1
+            if s[characters] == super_version:
+                found = True
+                pass
+            if counter == len(subs) and not found:
+                messagebox.showerror('Error', 'Character not found')
+                return ""
+    return ''.join([subs[i] for i in s])
 
 
 # This the main screen for the students, they can complete quizzes or view their progress
@@ -894,16 +920,17 @@ def view_progress(win):
     renamed_points = []
     for point in range(len(all_points)):
         renamed_points.append([float(all_points[point][0]), point])
-    x_points, y_points = bubble_sorting_data(renamed_points)
-    scores_over_time = Figure(figsize=(len(x_points), len(y_points)), dpi=100)
+    x_points, y_points, x_index = bubble_sorting_data(renamed_points)
+    scores_over_time = Figure(figsize=(5, 4), dpi=80)
     canvas_scores = FigureCanvasTkAgg(scores_over_time, master=progress)
-    ax = scores_over_time.add_subplot(111)
-    ax.set_xlabel('Homework-Number')
-    ax.set_ylabel('Percentage %')
-    rects = ax.bar(x_points, y_points, 0.5)
+    ax_1 = scores_over_time.add_subplot(111)
+    ax_1.set_xlabel('Homework-Number')
+    ax_1.set_ylabel('Percentage %')
+    ax_1.xaxis.set_major_locator(MaxNLocator(integer=True))
+    rectangles = ax_1.bar(x_index, y_points, 0.5)
     canvas_scores.draw()
     canvas_scores.get_tk_widget().place(x=x_cord / 4, y=(y_cord / 4) + 25, anchor='center')
-    scores_compared_to_average = Figure(figsize=(4, 3))
+    scores_compared_to_average = Figure(figsize=(10, 10))
     canvas_scores_average = FigureCanvasTkAgg(scores_compared_to_average, master=progress)
     all_points = db.retrieve_completed(2)
     Label(
@@ -923,7 +950,6 @@ def view_progress(win):
     ).place(x=x_cord * 9 / 10, y=y_cord / 7, anchor='center')
     progress.mainloop()
 
-
 def bubble_sorting_data(graph_data):
     for it in range(len(graph_data)):
         for sub_it in range(len(graph_data) - 1):
@@ -936,10 +962,12 @@ def bubble_sorting_data(graph_data):
                 pass
     x_points = []
     y_points = []
+    amount_of_x = []
     for size in range(len(graph_data)):
         y_points.append(graph_data[size][0])
-        x_points.append(graph_data[size][1])
-    return x_points, y_points
+        x_points.append(("HW: ", str(graph_data[size][1]+1)))
+        amount_of_x.append(graph_data[size][1]+1)
+    return x_points, y_points, amount_of_x
 
 
 if __name__ == "__main__":

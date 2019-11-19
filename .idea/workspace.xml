@@ -297,7 +297,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574072138847</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="superscript now fixed">
+      <created>1574079062822</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1574079062822</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -341,7 +348,8 @@
     <MESSAGE value="naming convention fixed" />
     <MESSAGE value="Changed data dating to date set instead of date completed, need to do multiple graphs for data visualisation" />
     <MESSAGE value="Figures now being created but there is not enough spce for them&#10;superscript is buggy in student side" />
-    <option name="LAST_COMMIT_MESSAGE" value="Figures now being created but there is not enough spce for them&#10;superscript is buggy in student side" />
+    <MESSAGE value="superscript now fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="superscript now fixed" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
