@@ -355,8 +355,8 @@ class Database:
                 self.personal_progress[date].append(dates_set[date][0])
             print(self.personal_progress)
             return self.personal_progress
-        # elif type == 2:
-        # self.conn.execute()
+        elif query_type == 2:
+            self.conn.execute('SELECT SCORE FROM ASSIGNED_QUIZ WHERE COMPLETE = 1')
         else:
             pass
 

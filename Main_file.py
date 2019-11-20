@@ -5,9 +5,9 @@ from Database_file import *
 import time
 import random
 
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
-from matplotlib.ticker import MaxNLocator
+# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# from matplotlib.figure import Figure
+# from matplotlib.ticker import MaxNLocator
 
 # I am using tkinter as it is a simple GUI tool
 # I import my other file to handle my database functions
@@ -308,7 +308,7 @@ def create_quiz(win):
     quiz.geometry(size)
     quiz.configure(bg=bgc)
     quiz.resizable(False, False)
-    topic = Text(quiz, width=20, height=4)
+    topic = Text(quiz, width=20, height=4, font=('quicksand', 11))
     topic.place(
         x=x_cord * 1 / 2, y=y_cord * 1 / 2, anchor="center"
     )
@@ -387,12 +387,12 @@ def create_question():
     question.geometry(size)
     question.configure(bg=bgc)
     question.resizable(False, False)
-    q_var_ent = Text(question, width=45, height=5)
-    ans_1_ent = Text(question, width=25, height=1)
-    ans_2_ent = Text(question, width=25, height=1)
-    ans_3_ent = Text(question, width=25, height=1)
-    ans_4_ent = Text(question, width=25, height=1)
-    timer_ent = Text(question, width=25, height=1)
+    q_var_ent = Text(question, width=45, height=5, font=('Quicksand', 11))
+    ans_1_ent = Text(question, width=25, height=1, font=('Quicksand', 8))
+    ans_2_ent = Text(question, width=25, height=1, font=('Quicksand', 8))
+    ans_3_ent = Text(question, width=25, height=1, font=('Quicksand', 8))
+    ans_4_ent = Text(question, width=25, height=1, font=('Quicksand', 8))
+    timer_ent = Text(question, width=25, height=1, font=('Quicksand', 8))
     q_details = [q_var_ent, ans_1_ent, ans_2_ent, ans_3_ent, ans_4_ent, timer_ent]
     lbls = [
         "Enter the Question here",
@@ -466,9 +466,18 @@ def create_question():
         text='²',
         bg=bgc,
         fg=fgc,
-        width=20,
-        height=3,
-        command=lambda: change_offset(question)
+        width=10,
+        height=2,
+        command=lambda: change_offset(question, 'super')
+    )
+    subscript_btn = Button(
+        question,
+        text='ₐ',
+        bg=bgc,
+        fg=fgc,
+        width=10,
+        height=2,
+        command=lambda: change_offset(question, 'sub')
     )
     add_q_btn.place(
         x=x_cord * 5 / 6, y=y_cord * 1 / 3, anchor="center"
@@ -477,28 +486,43 @@ def create_question():
         x=x_cord * 5 / 6, y=y_cord * 2 / 3, anchor="center"
     )
     superscript_btn.place(
+        x=x_cord * 5 / 6, y=y_cord * 1 / 8, anchor="center"
+    )
+    subscript_btn.place(
         x=x_cord * 5 / 6, y=y_cord * 1 / 5, anchor="center"
     )
     question.mainloop()
 
 
-def change_offset(root):
+def change_offset(root, offset_type):
     entry_box = root.focus_get()
-    superscript_ins = Tk()
-    superscript_ins.geometry('300x400')
-    superscript_ins.configure(bg=bgc)
-    Label(superscript_ins, text='Insert the text that you would like as superscript',
+    offset = Tk()
+    offset.geometry('300x400')
+    offset.configure(bg=bgc)
+    Label(offset, text='Insert the text that\nyou would like with an offset',
           bg=bgc, fg=fgc).place(x=150, y=100, anchor='center')
-    ent = Entry(superscript_ins)
+    ent = Entry(offset)
     ent.place(x=150, y=200, anchor='center')
-    enter_btn = Button(
-        superscript_ins,
-        text='Enter',
-        bg=bgc,
-        fg=fgc,
-        command=lambda: [entry_box.insert('insert', to_sup(ent.get())), superscript_ins.destroy()]
-    )
-    enter_btn.place(x=150, y=350, anchor='center')
+    if offset_type == 'super':
+        enter_btn = Button(
+            offset,
+            text='Enter',
+            bg=bgc,
+            fg=fgc,
+            command=lambda: [entry_box.insert('insert', to_sup(ent.get())), offset.destroy()]
+        )
+        enter_btn.place(x=150, y=350, anchor='center')
+    elif offset_type == 'sub':
+        enter_btn = Button(
+            offset,
+            text='Enter',
+            bg=bgc,
+            fg=fgc,
+            command=lambda: [entry_box.insert('insert', to_sub(ent.get())), offset.destroy()]
+        )
+        enter_btn.place(x=150, y=350, anchor='center')
+    else:
+        messagebox.showerror('Coding Error', 'No offset type specified')
 
 
 def to_sup(s):
@@ -529,19 +553,22 @@ def to_sup(s):
     return ''.join([sups[i] for i in s])
 
 def to_sub(s):
-    subs = {'1': u'\xb9',
-            '0': u'\u2070',
-            '3': u'\xb3',
-            '2': u'\xb2',
-            '5': u'\u2075',
-            '4': u'\u2074',
-            '7': u'\u2077',
-            '6': u'\u2076',
-            '9': u'\u2079',
-            '8': u'\u2078',
-            '+': u'\u207a',
-            '-': u'\u207b',
-            'i': u'\u2071'}
+    subs = {'1': u'\u2081',
+            '0': u'\u2080',
+            '3': u'\u2083',
+            '2': u'\u2082',
+            '5': u'\u2085',
+            '4': u'\u2084',
+            '7': u'\u2087',
+            '6': u'\u2086',
+            '9': u'\u2089',
+            '8': u'\u2088',
+            '+': u'\u208a',
+            '-': u'\u208b',
+            'i': u'\u1d62',
+            'a': u'\u2090',
+            'e': u'\u2091',
+            't': u'\u209c'}
     for characters in range(len(s)):
         counter = 0
         found = False
@@ -621,7 +648,6 @@ def reset_tests():
 
 
 def time_out(win, frame, next_question):
-    print("You ran out of time!")
     win.after(2000, quiz_active, win, frame, next_question)
 
 
@@ -657,7 +683,6 @@ def submit_ans(correct, score, win, frame, next_question):
     next_question += 1
     if correct == 1:
         score += 1
-        print("Correct!")
         win.after(
             500,
             quiz_active,
@@ -679,7 +704,6 @@ def submit_ans(correct, score, win, frame, next_question):
 
 
 def end_test(win, score, question):
-    print("test has ended")
     win.destroy()
     end_screen = Tk()
     end_screen.geometry(size)
@@ -708,7 +732,7 @@ def end_test(win, score, question):
         fg=fgc,
         bg=bgc,
         font=def_font,
-        command=lambda: main_screen_user()
+        command=lambda: (end_screen.destroy(), main_screen_user())
     ).place(x=x_cord * 4 / 5, y=y_cord / 5, anchor='center')
     db.end_test(score, question)
     db.close_data()
