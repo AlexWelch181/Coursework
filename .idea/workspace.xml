@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1df29f0a-23bd-45a2-af99-ad9cdea860a0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/V20898.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/V20898.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Database_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_file.py" afterDir="false" />
@@ -312,7 +313,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574183014107</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="subscript now integrated">
+      <created>1574245235892</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1574245235892</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -358,7 +366,8 @@
     <MESSAGE value="Figures now being created but there is not enough spce for them&#10;superscript is buggy in student side" />
     <MESSAGE value="superscript now fixed" />
     <MESSAGE value="Graphs fixed due to forced integers and increased figsize, note: subscript function to be finished and more graphs to be crafted using the database data" />
-    <option name="LAST_COMMIT_MESSAGE" value="Graphs fixed due to forced integers and increased figsize, note: subscript function to be finished and more graphs to be crafted using the database data" />
+    <MESSAGE value="subscript now integrated" />
+    <option name="LAST_COMMIT_MESSAGE" value="subscript now integrated" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

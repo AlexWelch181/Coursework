@@ -8,6 +8,8 @@ import hashlib  # This is a hash library for my password storage
 import uuid  # This is a salting library to keep hashed passwords unique
 from datetime import date  # This allows me to collect the dates set
 from tkinter import messagebox  # This is a part of the tkinter module that creates pop-ups
+import re
+import smtplib, ssl
 
 # Connecting to the host database#
 
@@ -33,7 +35,8 @@ class Database:
                USERNAME     TEXT    NOT NULL,
                ENCRYPT_PASS TEXT   NOT NULL,
                SALT_VAL    TEXT    NOT NULL,
-               ADMIN       INTEGER NOT NULL);"""
+               ADMIN       INTEGER NOT NULL,
+               EMAIL       VARCHAR(320) NOT NULL);"""
                 )
                 self.conn.execute(
                     """CREATE TABLE IF NOT EXISTS QUIZ
@@ -153,31 +156,54 @@ class Database:
 
     # This method makes sure the new account's password is encrypted and has a salt to make it even harder to crack
     def create_account(
-            self, user, password, conf_password, admin
+            self, user, password, conf_password, admin, email
     ):
         if admin == "True":
             admin = 1
         else:
             admin = 0
-        if not self.search_user(user):
-            if conf_password == password:
-                salt = str(uuid.uuid4())
-                salted_pass = password + str(salt)
-                hashed_pass = hashlib.md5(
-                    salted_pass.encode()
-                )
-                coded_pass = str(hashed_pass.hexdigest())
-                sql = """INSERT INTO USERS(USERNAME,ENCRYPT_PASS,SALT_VAL,ADMIN) VALUES(%s,%s,%s,%s)"""
-                val = [user, coded_pass, salt, admin]
-                self.conn.execute(sql, val)
+        regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+        if re.search(regex, email):
+            if not self.search_user(user):
+                if conf_password == password:
+                    salt = str(uuid.uuid4())
+                    salted_pass = password + str(salt)
+                    hashed_pass = hashlib.md5(
+                        salted_pass.encode()
+                    )
+                    coded_pass = str(hashed_pass.hexdigest())
+                    sql = """INSERT INTO USERS(USERNAME,ENCRYPT_PASS,SALT_VAL,ADMIN,EMAIL) VALUES(%s,%s,%s,%s,%s)"""
+                    val = [user, coded_pass, salt, admin, email]
+                    self.conn.execute(sql, val)
+                else:
+                    messagebox.showerror(
+                        "Error", "Passwords do not match"
+                    )
             else:
                 messagebox.showerror(
-                    "Error", "Passwords do not match"
+                    "Error", "That username is already taken"
                 )
         else:
             messagebox.showerror(
-                "Error", "That username is already taken"
+                "Error", "Email does not exist"
             )
+
+    def send_email(self):
+        user = ''
+        port = 465
+        smpt_server = "smpt.gmail.com"
+        sender = 'mathsappproject@gmail.com'
+        receiver = ''
+        password = 'A1exandme'
+        message = """\ 
+        Subject: New Assignment
+        
+        Hello %s there is a new assignment for you to complete at MathsApp\n please complete it for one week from 
+        now, good luck!\n Kind regards\n The MathsApp Team """.format(user)
+        contect = ssl.create_default_context()
+        with smtplib.SMTP_SSL(smpt_server, port, context=context) as server:
+            server.login(sender, password)
+            server.sendmail(sender, receiver, message)
 
     # This adds a question to the database
     def add_question(self, details):

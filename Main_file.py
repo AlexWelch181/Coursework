@@ -33,7 +33,8 @@ def create_acc(create_vals, win):
     password = str(create_vals[1].get())
     conf_password = str(create_vals[2].get())
     admin = str(create_vals[3].get())
-    db.create_account(user, password, conf_password, admin)
+    email = str(create_vals[4].get())
+    db.create_account(user, password, conf_password, admin, email)
     db.close_data()
     win.destroy()
     login()
@@ -135,6 +136,17 @@ def login():
     ).place(
         x=x_cord * 1 / 2, y=y_cord * 4 / 5, anchor="center"
     )
+    Button(
+        log,
+        text="Backdoor",
+        bg=bgc,
+        fg=fgc,
+        width=20,
+        height=3,
+        command=lambda: register(log),
+    ).place(
+        x=x_cord * 3 / 4, y=y_cord * 9 / 10, anchor="center"
+    )
     log.mainloop()
 
 
@@ -222,6 +234,7 @@ def register(win):
         "Password",
         "Confirm Password",
         "Admin",
+        "Email",
     ]
     for x in range(len(lbls)):
         Label(
@@ -251,8 +264,12 @@ def register(win):
     conf_pass = Entry(
         reg, show="*", justify="center", width=25
     )
+    new_email = Entry(reg, justify='center',  width=25)
     new_user.place(
         x=x_cord * 3 / 5, y=y_cord * 2 / 5, anchor="center"
+    )
+    new_email.place(
+        x=x_cord * 3 / 5, y=(y_cord * 3 / 5) + 50, anchor="center"
     )
     new_pass.place(
         x=x_cord * 3 / 5,
@@ -270,7 +287,7 @@ def register(win):
         y=y_cord * 2 / 5 + 150,
         anchor="center",
     )
-    data = [new_user, new_pass, conf_pass, admin]
+    data = [new_user, new_pass, conf_pass, admin, new_email]
     Button(
         reg,
         text="Register",
@@ -381,6 +398,11 @@ def create_quiz(win):
     )
 
 
+def insert_integral(root):
+    focus = root.focus_get()
+    focus.insert('insert', '∫')
+
+
 # Gives GUI for creating questions including database input
 def create_question():
     question = Tk()
@@ -479,6 +501,15 @@ def create_question():
         height=2,
         command=lambda: change_offset(question, 'sub')
     )
+    integral_btn = Button(
+        question,
+        text='∫',
+        bg=bgc,
+        fg=fgc,
+        width=10,
+        height=2,
+        command=lambda: insert_integral(question)
+    )
     add_q_btn.place(
         x=x_cord * 5 / 6, y=y_cord * 1 / 3, anchor="center"
     )
@@ -486,14 +517,17 @@ def create_question():
         x=x_cord * 5 / 6, y=y_cord * 2 / 3, anchor="center"
     )
     superscript_btn.place(
-        x=x_cord * 5 / 6, y=y_cord * 1 / 8, anchor="center"
+        x=x_cord * 5 / 7, y=y_cord * 1 / 8, anchor="center"
     )
     subscript_btn.place(
-        x=x_cord * 5 / 6, y=y_cord * 1 / 5, anchor="center"
+        x=x_cord * 5 / 7, y=y_cord * 1 / 5, anchor="center"
+    )
+    integral_btn.place(
+        x=x_cord * 7 / 8, y=y_cord * 1 / 5, anchor="center"
     )
     question.mainloop()
 
-
+# a function to return the window focus and let an entry be inserted to that focus
 def change_offset(root, offset_type):
     entry_box = root.focus_get()
     offset = Tk()
@@ -524,7 +558,8 @@ def change_offset(root, offset_type):
     else:
         messagebox.showerror('Coding Error', 'No offset type specified')
 
-
+# dictionary for all the superscript characters
+# checks that every character in the input is available before allowing the dictionary to be used
 def to_sup(s):
     sups = {'1': u'\xb9',
             '0': u'\u2070',
@@ -552,6 +587,7 @@ def to_sup(s):
                 return ""
     return ''.join([sups[i] for i in s])
 
+# same as above but for subscript characters instead
 def to_sub(s):
     subs = {'1': u'\u2081',
             '0': u'\u2080',
@@ -646,7 +682,7 @@ def main_screen_user():
 def reset_tests():
     db.quiz_details = []
 
-
+# callback loop for the time out state when a user runs out of time for a question
 def time_out(win, frame, next_question):
     win.after(2000, quiz_active, win, frame, next_question)
 
@@ -677,7 +713,7 @@ def timer(
                 question,
             )
 
-
+# submitting an answer and checkin against the database before moving on to next question
 def submit_ans(correct, score, win, frame, next_question):
     submit_ans.has_been_called = True
     next_question += 1
@@ -702,7 +738,7 @@ def submit_ans(correct, score, win, frame, next_question):
             score,
         )
 
-
+# results screen for the test that has just been completed
 def end_test(win, score, question):
     win.destroy()
     end_screen = Tk()
@@ -737,7 +773,7 @@ def end_test(win, score, question):
     db.end_test(score, question)
     db.close_data()
 
-
+# recursive function for the test which repeats for each question
 def quiz_active(win, frame, question=0, score=0):
     frame.destroy()
     if question > (len(db.question_details) - 1):
@@ -926,7 +962,7 @@ def complete_quiz(win):
             font=def_font,
         ).place(x=x_cord * (x_pos / 4), y=(y_cord * y_pos / 5) - 50, anchor="center")
 
-
+# external function to stop the graph as if the window is just destroyed then an error is created
 def stop_graph(win):
     win.quit()
     win.destroy()
@@ -974,6 +1010,7 @@ def view_progress(win):
     ).place(x=x_cord * 9 / 10, y=y_cord / 7, anchor='center')
     progress.mainloop()
 
+
 def bubble_sorting_data(graph_data):
     for it in range(len(graph_data)):
         for sub_it in range(len(graph_data) - 1):
@@ -989,8 +1026,8 @@ def bubble_sorting_data(graph_data):
     amount_of_x = []
     for size in range(len(graph_data)):
         y_points.append(graph_data[size][0])
-        x_points.append(("HW: ", str(graph_data[size][1]+1)))
-        amount_of_x.append(graph_data[size][1]+1)
+        x_points.append(("HW: ", str(graph_data[size][1] + 1)))
+        amount_of_x.append(graph_data[size][1] + 1)
     return x_points, y_points, amount_of_x
 
 
