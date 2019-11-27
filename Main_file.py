@@ -325,7 +325,7 @@ def create_quiz(win):
     quiz.geometry(size)
     quiz.configure(bg=bgc)
     quiz.resizable(False, False)
-    topic = Text(quiz, width=20, height=4, font=('quicksand', 11))
+    topic = Text(quiz, width=35, height=4, font=('quicksand', 11))
     topic.place(
         x=x_cord * 1 / 2, y=y_cord * 1 / 2, anchor="center"
     )
@@ -986,13 +986,19 @@ def view_progress(win):
     ax_1 = scores_over_time.add_subplot(111)
     ax_1.set_xlabel('Homework-Number')
     ax_1.set_ylabel('Percentage %')
-    ax_1.xaxis.set_major_locator(MaxNLocator(integer=True))
+    # this is to make sure the x-axis only shows integers
     rectangles = ax_1.bar(x_index, y_points, 0.5)
+    ax_1.set_xticklabels(x_points)
+    ax_1.xaxis.set_major_locator(MaxNLocator(integer=True))
     canvas_scores.draw()
     canvas_scores.get_tk_widget().place(x=x_cord / 4, y=(y_cord / 4) + 25, anchor='center')
     scores_compared_to_average = Figure(figsize=(10, 10))
     canvas_scores_average = FigureCanvasTkAgg(scores_compared_to_average, master=progress)
     all_points = db.retrieve_completed(2)
+    # ax_2 = scores_compared_to_average.add_subplot(111)
+    # ax_2.set_xlabel()
+    # ax_2.set_ylabel()
+    # ax_2.xaxis.set_major_locator()
     Label(
         progress,
         text="This is your Progress",
@@ -1021,13 +1027,19 @@ def bubble_sorting_data(graph_data):
                     graph_data[sub_it + 1] = temp
             except:
                 pass
-    x_points = []
+    x_points = ['',]
     y_points = []
     amount_of_x = []
     for size in range(len(graph_data)):
         y_points.append(graph_data[size][0])
-        x_points.append(("HW: ", str(graph_data[size][1] + 1)))
+        x_points.append(("HW: " + str(graph_data[size][1] + 1)))
         amount_of_x.append(graph_data[size][1] + 1)
+    print(amount_of_x)
+    if len(y_points) == 1:
+        y_points.append(0)
+        x_points.append('')
+        amount_of_x.append(amount_of_x[-1]+1)
+    print(x_points, y_points)
     return x_points, y_points, amount_of_x
 
 

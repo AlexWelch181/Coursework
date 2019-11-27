@@ -86,6 +86,7 @@ class Database:
                 self.answers = []
                 self.question_details = []
                 self.personal_progress = []
+                self.average_progress = []
                 self.success = True
             except ConnectionRefusedError:
                 tries += 1
@@ -189,21 +190,24 @@ class Database:
             )
 
     def send_email(self):
-        user = ''
+        self.conn.execute('SELECT EMAIL,USERNAME FROM USERS WHERE ADMIN = 0')
+        receivers = self.conn.fetchone()
         port = 465
         smpt_server = "smpt.gmail.com"
         sender = 'mathsappproject@gmail.com'
-        receiver = ''
         password = 'A1exandme'
-        message = """\ 
-        Subject: New Assignment
-        
-        Hello %s there is a new assignment for you to complete at MathsApp\n please complete it for one week from 
-        now, good luck!\n Kind regards\n The MathsApp Team """.format(user)
-        contect = ssl.create_default_context()
-        with smtplib.SMTP_SSL(smpt_server, port, context=context) as server:
-            server.login(sender, password)
-            server.sendmail(sender, receiver, message)
+        print(receivers)
+        for student in range(len(receivers)):
+            message = """\ 
+            Subject: New Assignment
+            
+            
+            Hello %s there is a new assignment for you to complete at MathsApp\n please complete it for one week from 
+            now, good luck!\n Kind regards\n The MathsApp Team """.format(receivers[student][1])
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL(smpt_server, port, context=context) as server:
+                server.login(sender, password)
+                server.sendmail(sender, receivers[student][0], message)
 
     # This adds a question to the database
     def add_question(self, details):
@@ -276,6 +280,7 @@ class Database:
                 ]
                 self.conn.execute(sql, vals)
             self.current_questions = []
+            # self.send_email()
 
     # This collects the quizzes that have been assigned to the user and adds them to a list
     def retrieve_quizes(self, complete=0):
@@ -379,10 +384,22 @@ class Database:
                 self.personal_progress.append(list(row))
             for date in range(len(self.personal_progress)):
                 self.personal_progress[date].append(dates_set[date][0])
-            print(self.personal_progress)
             return self.personal_progress
         elif query_type == 2:
             self.conn.execute('SELECT SCORE FROM ASSIGNED_QUIZ WHERE COMPLETE = 1')
+            all_scores = self.conn.fetchall()
+            amount = len(all_scores)
+            total = 0
+            for score in range(amount):
+                total += float(all_scores[score][0])
+            average = (round(total) / amount,)
+            self.average_progress.append(list(average))
+            self.conn.execute('SELECT DATE_SET FROM QUIZ')
+            count = 0
+            for date_set in self.conn:
+                # self.average_progress[count].append(date_set[0])
+                count += 1
+            return self.average_progress
         else:
             pass
 
