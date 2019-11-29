@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from tkinter import *
+from tkinter.ttk import Treeview
 from Database_file import *
 import time
 import random
@@ -329,6 +330,14 @@ def create_quiz(win):
     topic.place(
         x=x_cord * 1 / 2, y=y_cord * 1 / 2, anchor="center"
     )
+    tree = Treeview(quiz, column=("column1", "column2","column3"), show="headings")
+    tree.heading("#1", text="Question")
+    tree.heading("#2", text="Question No.")
+    tree.heading("#3", text="Delete?")
+    for question in range(len(db.current_questions)):
+        insert_tree_vals = tree.insert("", question+1, "", text=db.question_names[question], values=(question+1))
+    tree.update()
+    tree.place(x=x_cord / 2, y=y_cord * 4 / 5, anchor="center")
     lbls = [
         "Create a quiz",
         "Give the quiz a name and the topic it is based on",
@@ -355,7 +364,7 @@ def create_quiz(win):
         font=("System", 10),
         width=10,
         height=2,
-        command=lambda: [quiz.destroy(), create_question()]
+        command=lambda: [quiz.destroy(), create_question(tree)]
     )
     exit = Button(
         quiz,
@@ -404,7 +413,7 @@ def insert_integral(root):
 
 
 # Gives GUI for creating questions including database input
-def create_question():
+def create_question(tree):
     question = Tk()
     question.geometry(size)
     question.configure(bg=bgc)

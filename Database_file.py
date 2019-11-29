@@ -80,6 +80,7 @@ class Database:
                 mydb.commit()
                 self.current_questions = []
                 self.current_user = ""
+                self.question_names = []
                 self.current_test = None
                 self.quiz_details = []
                 self.question_id = []
@@ -217,7 +218,11 @@ class Database:
             timer = int(timer)
             sql = """INSERT INTO QUESTIONS(QUESTION_TEXT,TIMER) VALUES(%s,%s)"""
             q_text = details[0].get("1.0", 'end-1c')
+
+            self.question_names.append(q_text)
+            print(self.question_names)
             self.conn.execute(sql, [q_text, timer])
+
             self.conn.execute(
                 "SELECT QUESTION_ID FROM QUESTIONS WHERE QUESTION_TEXT='"
                 + q_text
