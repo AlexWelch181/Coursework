@@ -17,7 +17,8 @@ mydb = mysql.connector.connect(
     host="db4free.net",
     user="alex_welch",
     passwd="A1exandm3",
-    database='projectquiz')
+    database='projectquiz',
+    buffered=True)
 
 
 class Database:
@@ -36,7 +37,8 @@ class Database:
                ENCRYPT_PASS TEXT   NOT NULL,
                SALT_VAL    TEXT    NOT NULL,
                ADMIN       INTEGER NOT NULL,
-               EMAIL       VARCHAR(320) NOT NULL);"""
+               EMAIL       VARCHAR(320) NOT NULL,
+               TARGET      TEXT);"""
                 )
                 self.conn.execute(
                     """CREATE TABLE IF NOT EXISTS QUIZ
@@ -197,7 +199,6 @@ class Database:
         smpt_server = "smpt.gmail.com"
         sender = 'mathsappproject@gmail.com'
         password = 'A1exandme'
-        print(receivers)
         for student in range(len(receivers)):
             message = """\ 
             Subject: New Assignment
@@ -220,7 +221,6 @@ class Database:
             q_text = details[0].get("1.0", 'end-1c')
 
             self.question_names.append(q_text)
-            print(self.question_names)
             self.conn.execute(sql, [q_text, timer])
 
             self.conn.execute(
@@ -246,6 +246,12 @@ class Database:
             messagebox.showerror(
                 "Error", "Timer should be an integer"
             )
+
+    def remove_question(self, selected, tree):
+        tree.delete(selected)
+        index_of_deleted = int(selected[2::])
+        self.current_questions.pop(index_of_deleted-1)
+        self.question_names.pop(index_of_deleted-1)
 
     # This method assigned the quiz just made by a teacher to
     # all of the students in their class through the link table, quiz questions
@@ -390,21 +396,6 @@ class Database:
             for date in range(len(self.personal_progress)):
                 self.personal_progress[date].append(dates_set[date][0])
             return self.personal_progress
-        elif query_type == 2:
-            self.conn.execute('SELECT SCORE FROM ASSIGNED_QUIZ WHERE COMPLETE = 1')
-            all_scores = self.conn.fetchall()
-            amount = len(all_scores)
-            total = 0
-            for score in range(amount):
-                total += float(all_scores[score][0])
-            average = (round(total) / amount,)
-            self.average_progress.append(list(average))
-            self.conn.execute('SELECT DATE_SET FROM QUIZ')
-            count = 0
-            for date_set in self.conn:
-                # self.average_progress[count].append(date_set[0])
-                count += 1
-            return self.average_progress
         else:
             pass
 

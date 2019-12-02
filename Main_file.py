@@ -6,9 +6,9 @@ from Database_file import *
 import time
 import random
 
-# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-# from matplotlib.figure import Figure
-# from matplotlib.ticker import MaxNLocator
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+from matplotlib.ticker import MaxNLocator
 
 # I am using tkinter as it is a simple GUI tool
 # I import my other file to handle my database functions
@@ -236,6 +236,7 @@ def register(win):
         "Confirm Password",
         "Admin",
         "Email",
+        "Target",
     ]
     for x in range(len(lbls)):
         Label(
@@ -330,12 +331,11 @@ def create_quiz(win):
     topic.place(
         x=x_cord * 1 / 2, y=y_cord * 1 / 2, anchor="center"
     )
-    tree = Treeview(quiz, column=("column1", "column2","column3"), show="headings")
+    tree = Treeview(quiz, column=("column1", "column2"), show="headings")
     tree.heading("#1", text="Question")
     tree.heading("#2", text="Question No.")
-    tree.heading("#3", text="Delete?")
     for question in range(len(db.current_questions)):
-        insert_tree_vals = tree.insert("", question+1, "", text=db.question_names[question], values=(question+1))
+        insert_tree_vals = tree.insert("", "end", text=db.question_names[question], values=(db.question_names[question], question+1))
     tree.update()
     tree.place(x=x_cord / 2, y=y_cord * 4 / 5, anchor="center")
     lbls = [
@@ -395,7 +395,16 @@ def create_quiz(win):
             quiz.destroy(),
         ),
     )
-
+    delete_question = Button(
+        quiz,
+        text="Delete Question",
+        bg=bgc,
+        fg=fgc,
+        font=("System", 10),
+        width=20,
+        height=2,
+        command=lambda: db.remove_question(tree.selection()[0], tree)
+    )
     create.place(
         x=x_cord * 1 / 6, y=y_cord * 1 / 4, anchor="center"
     )
@@ -404,6 +413,9 @@ def create_quiz(win):
     )
     save_quiz.place(
         x=x_cord * 5 / 6, y=y_cord * 4 / 5, anchor="center"
+    )
+    delete_question.place(
+        x=x_cord * 1 / 5, y=y_cord * 4 / 5, anchor="center"
     )
 
 
@@ -737,7 +749,6 @@ def submit_ans(correct, score, win, frame, next_question):
             score,
         )
     else:
-        print("Incorrect")
         win.after(
             500,
             quiz_active,
@@ -1001,13 +1012,6 @@ def view_progress(win):
     ax_1.xaxis.set_major_locator(MaxNLocator(integer=True))
     canvas_scores.draw()
     canvas_scores.get_tk_widget().place(x=x_cord / 4, y=(y_cord / 4) + 25, anchor='center')
-    scores_compared_to_average = Figure(figsize=(10, 10))
-    canvas_scores_average = FigureCanvasTkAgg(scores_compared_to_average, master=progress)
-    all_points = db.retrieve_completed(2)
-    # ax_2 = scores_compared_to_average.add_subplot(111)
-    # ax_2.set_xlabel()
-    # ax_2.set_ylabel()
-    # ax_2.xaxis.set_major_locator()
     Label(
         progress,
         text="This is your Progress",
@@ -1043,12 +1047,10 @@ def bubble_sorting_data(graph_data):
         y_points.append(graph_data[size][0])
         x_points.append(("HW: " + str(graph_data[size][1] + 1)))
         amount_of_x.append(graph_data[size][1] + 1)
-    print(amount_of_x)
     if len(y_points) == 1:
         y_points.append(0)
         x_points.append('')
         amount_of_x.append(amount_of_x[-1]+1)
-    print(x_points, y_points)
     return x_points, y_points, amount_of_x
 
 
