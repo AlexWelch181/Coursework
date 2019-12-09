@@ -35,7 +35,8 @@ def create_acc(create_vals, win):
     conf_password = str(create_vals[2].get())
     admin = str(create_vals[3].get())
     email = str(create_vals[4].get())
-    db.create_account(user, password, conf_password, admin, email)
+    target = str(create_vals[5].get())
+    db.create_account(user, password, conf_password, admin, email, target)
     db.close_data()
     win.destroy()
     login()
@@ -249,7 +250,9 @@ def register(win):
     admin = StringVar(reg)
     admin.set("True")
     choices = ["True", "False"]
-
+    target = StringVar(reg)
+    target.set("N/A")
+    grades = ["N/A", "A*", "A", "B", "C", "D", "E"]
     Label(
         reg,
         text="Insert your details below to register your account",
@@ -266,7 +269,7 @@ def register(win):
     conf_pass = Entry(
         reg, show="*", justify="center", width=25
     )
-    new_email = Entry(reg, justify='center',  width=25)
+    new_email = Entry(reg, justify='center',  width=40)
     new_user.place(
         x=x_cord * 3 / 5, y=y_cord * 2 / 5, anchor="center"
     )
@@ -283,13 +286,21 @@ def register(win):
         y=y_cord * 2 / 5 + 100,
         anchor="center",
     )
+    # Allowing an admin to create a standard or admin account
     admin_opt = OptionMenu(reg, admin, *choices)
     admin_opt.place(
         x=x_cord * 3 / 5,
         y=y_cord * 2 / 5 + 150,
         anchor="center",
     )
-    data = [new_user, new_pass, conf_pass, admin, new_email]
+    # Lets teachers set targets for students
+    target_opt = OptionMenu(reg, target, *grades)
+    target_opt.place(
+        x=x_cord * 3 / 5,
+        y=y_cord * 3 / 5 + 100,
+        anchor="center"
+    )
+    data = [new_user, new_pass, conf_pass, admin, new_email, target]
     Button(
         reg,
         text="Register",
@@ -395,6 +406,7 @@ def create_quiz(win):
             quiz.destroy(),
         ),
     )
+    # button to remove the question from the quiz
     delete_question = Button(
         quiz,
         text="Delete Question",
@@ -1007,7 +1019,8 @@ def view_progress(win):
     ax_1.set_xlabel('Homework-Number')
     ax_1.set_ylabel('Percentage %')
     # this is to make sure the x-axis only shows integers
-    rectangles = ax_1.bar(x_index, y_points, 0.5)
+    rectangles = ax_1.bar(x_index, y_points, 0.25)
+    target_rect = ax_1.bar(x_index, db.user_target(x_index), 0.25)
     ax_1.set_xticklabels(x_points)
     ax_1.xaxis.set_major_locator(MaxNLocator(integer=True))
     canvas_scores.draw()

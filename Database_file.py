@@ -160,12 +160,16 @@ class Database:
 
     # This method makes sure the new account's password is encrypted and has a salt to make it even harder to crack
     def create_account(
-            self, user, password, conf_password, admin, email
+            self, user, password, conf_password, admin, email, target
     ):
         if admin == "True":
             admin = 1
+            if target != "N/A":
+                messagebox.showerror("Error", "Teachers should not have targets")
         else:
             admin = 0
+            if target == "N/A":
+                messagebox.showerror("Error", "Students should have a target")
         regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
         if re.search(regex, email):
             if not self.search_user(user):
@@ -176,8 +180,9 @@ class Database:
                         salted_pass.encode()
                     )
                     coded_pass = str(hashed_pass.hexdigest())
-                    sql = """INSERT INTO USERS(USERNAME,ENCRYPT_PASS,SALT_VAL,ADMIN,EMAIL) VALUES(%s,%s,%s,%s,%s)"""
-                    val = [user, coded_pass, salt, admin, email]
+                    sql = """INSERT INTO USERS(USERNAME,ENCRYPT_PASS,SALT_VAL,ADMIN,EMAIL,TARGET) VALUES(%s,%s,%s,%s,
+                    %s,%s) """
+                    val = [user, coded_pass, salt, admin, email, target]
                     self.conn.execute(sql, val)
                 else:
                     messagebox.showerror(
@@ -356,6 +361,8 @@ class Database:
             self.answers.append(self.conn.fetchall())
 
     def end_test(self, score, question):
+        if score == 0:
+            score = 1
         self.conn.execute(
             "SELECT USER_ID FROM USERS WHERE USERNAME='"
             + self.current_user
@@ -398,6 +405,30 @@ class Database:
             return self.personal_progress
         else:
             pass
+
+    def user_target(self, num):
+        self.conn.execute(
+            "SELECT TARGET FROM USERS WHERE USERNAME='"
+            + self.current_user
+            + "'"
+        )
+        target = self.conn.fetchone()[0]
+        if target == "A*":
+            target_percent = 90
+        elif target == "A":
+            target_percent = 80
+        elif target == "B":
+            target_percent = 70
+        elif target == "C":
+            target_percent = 60
+        elif target == "D":
+            target_percent = 50
+        elif target == "E":
+            target_percent = 40
+        target_list = []
+        for i in range(len(num)):
+            target_list.append(target_percent)
+        return target_list
 
     # Establish a connection to the database
     def open_data(self):
