@@ -10,6 +10,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from matplotlib.ticker import MaxNLocator
 
+# I decided to use matplotlib to display the student data to the teacher and back to the student,
+# for personal feedback
 # I am using tkinter as it is a simple GUI tool
 # I import my other file to handle my database functions
 
@@ -326,7 +328,46 @@ def register(win):
 
 def view_students(win):
     win.destroy()
-    pass
+    progress = Tk()
+    graph_frame = Frame(progress)
+    progress.geometry(size)
+    progress.configure(bg=bgc)
+    progress.title("Class Progress")
+    # using matplotlib to create the graph
+    all_points = db.retrieve_completed(1, user=db.first_user())
+    renamed_points = []
+    for point in range(len(all_points)):
+        renamed_points.append([float(all_points[point][0]), point])
+    x_points, y_points, x_index = bubble_sorting_data(renamed_points)
+    scores_over_time = Figure(figsize=(5, 4), dpi=80)
+    canvas_scores = FigureCanvasTkAgg(scores_over_time, master=graph_frame)
+    ax_1 = scores_over_time.add_subplot(111)
+    ax_1.set_xlabel('Homework-Number')
+    ax_1.set_ylabel('Student Percentage %')
+    # this is to make sure the x-axis only shows integers
+    rectangles = ax_1.bar(x_index, y_points, 0.25)
+    target_rect = ax_1.bar(x_index, db.user_target(x_index), 0.25)
+    ax_1.set_xticklabels(x_points)
+    ax_1.xaxis.set_major_locator(MaxNLocator(integer=True))
+    canvas_scores.draw()
+    canvas_scores.get_tk_widget().place(x=x_cord / 4, y=(y_cord / 4) + 25, anchor='center')
+
+    Label(
+        progress,
+        text="This is your Classes Progress",
+        bg=bgc,
+        fg=fgc,
+        font=def_font,
+    ).place(x=x_cord / 2, y=(y_cord / 10) - 50, anchor='center')
+    Button(
+        progress,
+        text="Back",
+        bg=bgc,
+        fg=fgc,
+        font=def_font,
+        command=lambda: (stop_graph(progress), main_screen_user())
+    ).place(x=x_cord * 9 / 10, y=y_cord / 7, anchor='center')
+    progress.mainloop()
 
 
 # From here the teachers can view their current test they're making and publish it to students

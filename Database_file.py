@@ -1,15 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# This file is used to create the database class and execute all sql commands
-# I am using mysql to connect to my online database
-import mysql.connector  # This is a main connection to the database
 import hashlib  # This is a hash library for my password storage
+import re
+import smtplib
+import ssl
 import uuid  # This is a salting library to keep hashed passwords unique
 from datetime import date  # This allows me to collect the dates set
 from tkinter import messagebox  # This is a part of the tkinter module that creates pop-ups
-import re
-import smtplib, ssl
+
+# This file is used to create the database class and execute all sql commands
+# I am using mysql to connect to my online database
+import mysql.connector  # This is a main connection to the database
 
 # Connecting to the host database#
 
@@ -255,8 +257,8 @@ class Database:
     def remove_question(self, selected, tree):
         tree.delete(selected)
         index_of_deleted = int(selected[2::])
-        self.current_questions.pop(index_of_deleted-1)
-        self.question_names.pop(index_of_deleted-1)
+        self.current_questions.pop(index_of_deleted - 1)
+        self.question_names.pop(index_of_deleted - 1)
 
     # This method assigned the quiz just made by a teacher to
     # all of the students in their class through the link table, quiz questions
@@ -381,11 +383,13 @@ class Database:
         )
         self.conn.execute(sql, vals)
 
-    def retrieve_completed(self, query_type):
+    def retrieve_completed(self, query_type, user=0):
+        if user == 0:
+            user = self.current_user
         if query_type == 1:
             self.conn.execute(
                 "SELECT USER_ID FROM USERS WHERE USERNAME='"
-                + self.current_user
+                + user
                 + "'"
             )
             user_id = str(self.conn.fetchone()[0])
@@ -406,10 +410,12 @@ class Database:
         else:
             pass
 
-    def user_target(self, num):
+    def user_target(self, num, user=0):
+        if user ==0:
+            user = self.current_user
         self.conn.execute(
             "SELECT TARGET FROM USERS WHERE USERNAME='"
-            + self.current_user
+            + user
             + "'"
         )
         target = self.conn.fetchone()[0]
@@ -425,6 +431,8 @@ class Database:
             target_percent = 50
         elif target == "E":
             target_percent = 40
+        else:
+            target_percent = 0
         target_list = []
         for i in range(len(num)):
             target_list.append(target_percent)
@@ -433,6 +441,12 @@ class Database:
     # Establish a connection to the database
     def open_data(self):
         self.conn = mydb.cursor()
+
+    def first_user(self):
+        self.conn.execute("SELECT USERNAME FROM USERS WHERE ADMIN = 0")
+        user = self.conn.fetchone()[0]
+        print(user)
+        return user
 
     # Save all the changes made to the database
     def close_data(self):
