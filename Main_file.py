@@ -1081,6 +1081,15 @@ def view_progress(win):
         font=def_font,
         command=lambda: (stop_graph(progress), main_screen_user())
     ).place(x=x_cord * 9 / 10, y=y_cord / 7, anchor='center')
+    for weakness in range(len(db.user_weakness())):
+        Label(
+            progress,
+            text=db.user_weakness()[weakness],
+            bg=bgc,
+            fg=fgc,
+            font=def_font,
+        ).place(x=x_cord * 3 / 4, y=(y_cord * 7 / 10) + (50 * weakness), anchor='center')
+
     progress.mainloop()
 
 

@@ -172,20 +172,26 @@ class Database:
             admin = 0
             if target == "N/A":
                 messagebox.showerror("Error", "Students should have a target")
-        regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
-        if re.search(regex, email):
+        regex_email = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+        regex_pass = '^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'
+        if re.search(regex_email, email):
             if not self.search_user(user):
                 if conf_password == password:
-                    salt = str(uuid.uuid4())
-                    salted_pass = password + str(salt)
-                    hashed_pass = hashlib.md5(
-                        salted_pass.encode()
-                    )
-                    coded_pass = str(hashed_pass.hexdigest())
-                    sql = """INSERT INTO USERS(USERNAME,ENCRYPT_PASS,SALT_VAL,ADMIN,EMAIL,TARGET) VALUES(%s,%s,%s,%s,
-                    %s,%s) """
-                    val = [user, coded_pass, salt, admin, email, target]
-                    self.conn.execute(sql, val)
+                    if re.search(regex_pass, password):
+                        salt = str(uuid.uuid4())
+                        salted_pass = password + str(salt)
+                        hashed_pass = hashlib.md5(
+                            salted_pass.encode()
+                        )
+                        coded_pass = str(hashed_pass.hexdigest())
+                        sql = """INSERT INTO USERS(USERNAME,ENCRYPT_PASS,SALT_VAL,ADMIN,EMAIL,TARGET) VALUES(%s,%s,%s,%s,
+                        %s,%s) """
+                        val = [user, coded_pass, salt, admin, email, target]
+                        self.conn.execute(sql, val)
+                    else:
+                        messagebox.showerror(
+                            "Error", "Passwords must contain\nat least one letter and one number"
+                        )
                 else:
                     messagebox.showerror(
                         "Error", "Passwords do not match"
@@ -199,6 +205,7 @@ class Database:
                 "Error", "Email does not exist"
             )
 
+    # this function sends emails to users after a quiz has been set for them
     def send_email(self):
         self.conn.execute('SELECT EMAIL,USERNAME FROM USERS WHERE ADMIN = 0')
         receivers = self.conn.fetchone()
@@ -411,7 +418,7 @@ class Database:
             pass
 
     def user_target(self, num, user=0):
-        if user ==0:
+        if user == 0:
             user = self.current_user
         self.conn.execute(
             "SELECT TARGET FROM USERS WHERE USERNAME='"
@@ -437,6 +444,24 @@ class Database:
         for i in range(len(num)):
             target_list.append(target_percent)
         return target_list
+
+    def user_weakness(self):
+        weaknesses = []
+        self.conn.execute(
+            "SELECT USER_ID FROM USERS WHERE USERNAME='"
+            + self.current_user
+            + "'"
+        )
+        user_id = self.conn.fetchone()[0]
+        sql = "SELECT QUIZ,SCORE FROM ASSIGNED_QUIZ WHERE (USER = %s AND SCORE <= 50)"
+        val = (user_id,)
+        self.conn.execute(sql, val)
+        quiz_scores = self.conn.fetchall()
+        for i in range(quiz_scores):
+            self.conn.execute("SELECT TOPIC FROM QUIZ WHERE QUIZ_ID ='" + quiz_scores[i][0] + "'")
+            weaknesses.append(self.conn.fetchone()[0])
+        print(weaknesses)
+        return weaknesses
 
     # Establish a connection to the database
     def open_data(self):
