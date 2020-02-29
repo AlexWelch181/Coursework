@@ -81,6 +81,7 @@ def login():
     log.configure(bg=bgc)
     log.title("Maths Quiz~Alex Welch")
     lbls = ["Username", "Password"]
+    # Creating Labels
     for x in range(len(lbls)):
         Label(
             log, text=lbls[x], bg=bgc, fg=fgc, font=def_font
@@ -98,6 +99,7 @@ def login():
     ).place(
         x=x_cord * 1 / 2, y=y_cord * 1 / 5, anchor="center"
     )
+    #Entry boxes for user data
     user = Entry(
         log, width=25, bg=bgc, fg=fgc, justify="center"
     )
@@ -118,6 +120,7 @@ def login():
         anchor="center",
     )
     data = [user, password]
+    # passes login details to function to check them
     Button(
         log,
         text="Login",
@@ -142,17 +145,28 @@ def login():
     )
     Button(
         log,
-        text="Backdoor",
+        text="Enable/Disable\nDark Theme",
         bg=bgc,
         fg=fgc,
         width=20,
         height=3,
-        command=lambda: register(log),
+        command=lambda: dark_theme(log),
     ).place(
         x=x_cord * 3 / 4, y=y_cord * 9 / 10, anchor="center"
     )
+    # tkinter function to keep awaiting user input
     log.mainloop()
 
+def dark_theme(win):
+    global bgc, fgc
+    win.destroy()
+    if bgc == "#4281A4" and fgc == "#EEEBD3":
+        bgc = "#262730"
+        fgc = "#FBFBF2"
+    elif bgc == "#262730" and fgc == "#FBFBF2":
+        bgc = "#4281A4"
+        fgc = "#EEEBD3"
+    login()
 
 # This is the main screen with different options such as creating tasks and viewing the students progress
 def main_screen_admin():
@@ -372,7 +386,6 @@ def view_students(win):
 
 # From here the teachers can view their current test they're making and publish it to students
 
-
 def create_quiz(win):
     win.destroy()
     quiz = Tk()
@@ -429,6 +442,7 @@ def create_quiz(win):
         command=lambda: (
             main_screen_admin(),
             quiz.destroy(),
+            db.current_questions.clear(),
         ),
     )
     save_quiz = Button(
@@ -444,6 +458,7 @@ def create_quiz(win):
             db.open_data(),
             db.question_assigned_to_test(topic.get("1.0", 'end-1c')),
             db.close_data(),
+            db.current_questions.clear(),
             quiz.destroy(),
         ),
     )
@@ -1007,7 +1022,11 @@ def complete_quiz(win):
     )
     x_pos = 1
     y_pos = 1
-    for data in range(len(db.quiz_details)):
+    if len(db.quiz_details) > 9:
+        length = 9
+    else:
+        length = len(db.quiz_details)
+    for data in range(length):
         if (data + 1) % 4 == 0 and data != 0:
             x_pos += 1
             y_pos = 1

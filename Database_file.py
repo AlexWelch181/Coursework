@@ -227,41 +227,53 @@ class Database:
 
     # This adds a question to the database
     def add_question(self, details):
+        for detail in range(len(details)):
+            if details[detail].get('1.0', 'end-1c') == "":
+                messagebox.showerror(
+                    "Error", "Fields must not be left blank"
+                )
+                return False
         timer = details[5].get('1.0', 'end-1c')
         # checking that the timer is an integer and not any other input
         if timer.isdigit():
-            timer = int(timer)
-            sql = """INSERT INTO QUESTIONS(QUESTION_TEXT,TIMER) VALUES(%s,%s)"""
-            q_text = details[0].get("1.0", 'end-1c')
+            if timer != 0:
+                timer = int(timer)
+                sql = """INSERT INTO QUESTIONS(QUESTION_TEXT,TIMER) VALUES(%s,%s)"""
+                q_text = details[0].get("1.0", 'end-1c')
 
-            self.question_names.append(q_text)
-            self.conn.execute(sql, [q_text, timer])
+                self.question_names.append(q_text)
+                self.conn.execute(sql, [q_text, timer])
 
-            self.conn.execute(
-                "SELECT QUESTION_ID FROM QUESTIONS WHERE QUESTION_TEXT='"
-                + q_text
-                + "'"
-            )
-            question_id = self.conn.fetchone()[0]
-            self.current_questions.append(question_id)
-            for answer in range(1, 5):
-                if answer == 1:
-                    correct = 1
+                self.conn.execute(
+                    "SELECT QUESTION_ID FROM QUESTIONS WHERE QUESTION_TEXT='"
+                    + q_text
+                    + "'"
+                )
+                question_id = self.conn.fetchone()[0]
+                self.current_questions.append(question_id)
+                for answer in range(1, 5):
+                    if answer == 1:
+                        correct = 1
+                    else:
+                        correct = 0
+                    sql = """INSERT INTO ANSWERS(ANSWER_TEXT,CORRECT,PARENT_QUESTION) VALUES(%s,%s,%s)"""
+                    vals = [
+                        str(details[answer].get('1.0', 'end-1c')),
+                        correct,
+                        question_id,
+                    ]
+                    self.conn.execute(sql, vals)
                 else:
-                    correct = 0
-                sql = """INSERT INTO ANSWERS(ANSWER_TEXT,CORRECT,PARENT_QUESTION) VALUES(%s,%s,%s)"""
-                vals = [
-                    str(details[answer].get('1.0', 'end-1c')),
-                    correct,
-                    question_id,
-                ]
-                self.conn.execute(sql, vals)
+                    messagebox.showerror(
+                        "Error", "Timer should not be zero"
+                    )
         else:
             messagebox.showerror(
                 "Error", "Timer should be an integer"
             )
 
     def remove_question(self, selected, tree):
+
         tree.delete(selected)
         index_of_deleted = int(selected[2::])
         self.current_questions.pop(index_of_deleted - 1)
@@ -309,6 +321,7 @@ class Database:
 
     # This collects the quizzes that have been assigned to the user and adds them to a list
     def retrieve_quizes(self, complete=0):
+        self.quiz_details.clear()
         self.conn.execute(
             "SELECT USER_ID FROM USERS WHERE USERNAME='"
             + self.current_user
@@ -453,11 +466,11 @@ class Database:
             + "'"
         )
         user_id = self.conn.fetchone()[0]
-        sql = "SELECT QUIZ,SCORE FROM ASSIGNED_QUIZ WHERE (USER = %s AND SCORE <= 50)"
+        sql = "SELECT QUIZ_ASSIGNED,SCORE FROM ASSIGNED_QUIZ WHERE (USER = %s AND SCORE <= 50)"
         val = (user_id,)
         self.conn.execute(sql, val)
         quiz_scores = self.conn.fetchall()
-        for i in range(quiz_scores):
+        for i in range(len(quiz_scores)):
             self.conn.execute("SELECT TOPIC FROM QUIZ WHERE QUIZ_ID ='" + quiz_scores[i][0] + "'")
             weaknesses.append(self.conn.fetchone()[0])
         print(weaknesses)
