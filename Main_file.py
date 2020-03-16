@@ -6,9 +6,9 @@ from Database_file import *
 import time
 import random
 
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
-from matplotlib.ticker import MaxNLocator
+# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# from matplotlib.figure import Figure
+# from matplotlib.ticker import MaxNLocator
 
 # I decided to use matplotlib to display the student data to the teacher and back to the student,
 # for personal feedback
@@ -16,14 +16,14 @@ from matplotlib.ticker import MaxNLocator
 # I import my other file to handle my database functions
 
 # These are the base size and colour variables for the program
-# I put these here so that if i wanna change the size of my window everything else will change in proportion
+# These are constants and so 
 
-x_cord = 1200
-y_cord = 750
-size = "{}x{}".format(x_cord, y_cord)
-bgc = "#4281A4"
-fgc = "#EEEBD3"
-def_font = ("Times New Roman", 20)
+X_CORD = 1200
+Y_CORD = 750
+SIZE = "{}x{}".format(X_CORD, Y_CORD)
+BGC = "#4281A4"
+FGC = "#EEEBD3"
+DEF_FONT = ("Times New Roman", 20)
 
 
 # Creates account by taking data from entries
@@ -45,7 +45,6 @@ def create_acc(create_vals, win):
 
 
 # Checks if the inputted password matches the user password on the database
-
 
 def login_check(login_vals, win):
     db.open_data()
@@ -76,90 +75,101 @@ def login_check(login_vals, win):
 
 def login():
     log = Tk()
-    log.geometry(size)
+    log.geometry(SIZE)
     log.resizable(False, False)
-    log.configure(bg=bgc)
+    log.configure(bg=BGC)
     log.title("Maths Quiz~Alex Welch")
     lbls = ["Username", "Password"]
     for x in range(len(lbls)):
         Label(
-            log, text=lbls[x], bg=bgc, fg=fgc, font=def_font
+            log, text=lbls[x], bg=BGC, fg=FGC, font=DEF_FONT
         ).place(
-            x=x_cord * 1 / 3,
-            y=y_cord * 2 / 5 + 50 * x,
+            x=X_CORD * 1 / 3,
+            y=Y_CORD * 2 / 5 + 50 * x,
             anchor="center",
         )
     Label(
         log,
         text="Please enter user details below",
-        bg=bgc,
-        fg=fgc,
-        font=def_font,
+        bg=BGC,
+        fg=FGC,
+        font=DEF_FONT,
     ).place(
-        x=x_cord * 1 / 2, y=y_cord * 1 / 5, anchor="center"
+        x=X_CORD * 1 / 2, y=Y_CORD * 1 / 5, anchor="center"
     )
     user = Entry(
-        log, width=25, bg=bgc, fg=fgc, justify="center"
+        log, width=25, bg=BGC, fg=FGC, justify="center"
     )
     password = Entry(
         log,
         show="*",
         width=25,
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         justify="center",
     )
     user.place(
-        x=x_cord * 3 / 5, y=y_cord * 2 / 5, anchor="center"
+        x=X_CORD * 3 / 5, y=Y_CORD * 2 / 5, anchor="center"
     )
     password.place(
-        x=x_cord * 3 / 5,
-        y=y_cord * 2 / 5 + 50,
+        x=X_CORD * 3 / 5,
+        y=Y_CORD * 2 / 5 + 50,
         anchor="center",
     )
     data = [user, password]
     Button(
         log,
         text="Login",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=3,
         command=lambda: login_check(data, log),
     ).place(
-        x=x_cord * 1 / 2, y=y_cord * 5 / 7, anchor="center"
+        x=X_CORD * 1 / 2, y=Y_CORD * 5 / 7, anchor="center"
     )
     Button(
         log,
         text="Exit",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=3,
         command=lambda: log.destroy(),
     ).place(
-        x=x_cord * 1 / 2, y=y_cord * 4 / 5, anchor="center"
+        x=X_CORD * 1 / 2, y=Y_CORD * 4 / 5, anchor="center"
     )
     Button(
         log,
-        text="Backdoor",
-        bg=bgc,
-        fg=fgc,
+        text="Enable/Disable\nDark Theme",
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=3,
-        command=lambda: register(log),
+        command=lambda: dark_theme(log),
     ).place(
-        x=x_cord * 3 / 4, y=y_cord * 9 / 10, anchor="center"
+        x=X_CORD * 3 / 4, y=Y_CORD * 9 / 10, anchor="center"
     )
     log.mainloop()
+
+def dark_theme(win):
+    global BGC, FGC
+    win.destroy()
+    if BGC == "#4281A4" and FGC == "#EEEBD3":
+        BGC = "#262730"
+        FGC = "#FBFBF2"
+    elif BGC == "#262730" and FGC == "#FBFBF2":
+        BGC = "#4281A4"
+        FGC = "#EEEBD3"
+    login()
 
 
 # This is the main screen with different options such as creating tasks and viewing the students progress
 def main_screen_admin():
     main_win = Tk()
     main_win.title("Main Admin Window")
-    main_win.geometry(size)
-    main_win.configure(bg=bgc)
+    main_win.geometry(SIZE)
+    main_win.configure(bg=BGC)
     main_lbls = [
         "Welcome Back",
         "Here you can either assign work or check your students performance",
@@ -168,60 +178,60 @@ def main_screen_admin():
         Label(
             main_win,
             text=main_lbls[lbls],
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
         ).place(
-            x=x_cord * 1 / 2,
-            y=y_cord * 1 / 5 + 50 * lbls,
+            x=X_CORD * 1 / 2,
+            y=Y_CORD * 1 / 5 + 50 * lbls,
             anchor="center",
         )
     Button(
         main_win,
         text="Make new account",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=3,
         command=lambda: register(main_win),
     ).place(
-        x=x_cord * 1 / 2, y=y_cord * 4 / 5, anchor="center"
+        x=X_CORD * 1 / 2, y=Y_CORD * 4 / 5, anchor="center"
     )
 
     Button(
         main_win,
         text="Log Out",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=3,
         command=lambda: (main_win.destroy(), login()),
     ).place(
-        x=x_cord * 1 / 2, y=y_cord * 9 / 10, anchor="center"
+        x=X_CORD * 1 / 2, y=Y_CORD * 9 / 10, anchor="center"
     )
 
     Button(
         main_win,
         text="Create a Quiz",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=7,
         command=lambda: create_quiz(main_win),
     ).place(
-        x=x_cord * 1 / 3, y=y_cord * 1 / 2, anchor="center"
+        x=X_CORD * 1 / 3, y=Y_CORD * 1 / 2, anchor="center"
     )
 
     Button(
         main_win,
         text="Class Review",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=7,
         command=lambda: view_students(main_win),
     ).place(
-        x=x_cord * 2 / 3, y=y_cord * 1 / 2, anchor="center"
+        x=X_CORD * 2 / 3, y=Y_CORD * 1 / 2, anchor="center"
     )
 
 
@@ -230,9 +240,9 @@ def register(win):
     win.destroy()
     reg = Tk()
     reg.title("Register")
-    reg.geometry(size)
+    reg.geometry(SIZE)
     reg.resizable(False, False)
-    reg.configure(bg=bgc)
+    reg.configure(bg=BGC)
     lbls = [
         "Username",
         "Password",
@@ -243,10 +253,10 @@ def register(win):
     ]
     for x in range(len(lbls)):
         Label(
-            reg, text=lbls[x], bg=bgc, fg=fgc, font=def_font
+            reg, text=lbls[x], bg=BGC, fg=FGC, font=DEF_FONT
         ).place(
-            x=x_cord * 1 / 3,
-            y=y_cord * 2 / 5 + 50 * x,
+            x=X_CORD * 1 / 3,
+            y=Y_CORD * 2 / 5 + 50 * x,
             anchor="center",
         )
     admin = StringVar(reg)
@@ -258,11 +268,11 @@ def register(win):
     Label(
         reg,
         text="Insert your details below to register your account",
-        bg=bgc,
-        fg=fgc,
-        font=def_font,
+        bg=BGC,
+        fg=FGC,
+        font=DEF_FONT,
     ).place(
-        x=x_cord * 1 / 2, y=y_cord * 1 / 5, anchor="center"
+        x=X_CORD * 1 / 2, y=Y_CORD * 1 / 5, anchor="center"
     )
     new_user = Entry(reg, justify="center", width=25)
     new_pass = Entry(
@@ -273,56 +283,56 @@ def register(win):
     )
     new_email = Entry(reg, justify='center',  width=40)
     new_user.place(
-        x=x_cord * 3 / 5, y=y_cord * 2 / 5, anchor="center"
+        x=X_CORD * 3 / 5, y=Y_CORD * 2 / 5, anchor="center"
     )
     new_email.place(
-        x=x_cord * 3 / 5, y=(y_cord * 3 / 5) + 50, anchor="center"
+        x=X_CORD * 3 / 5, y=(Y_CORD * 3 / 5) + 50, anchor="center"
     )
     new_pass.place(
-        x=x_cord * 3 / 5,
-        y=y_cord * 2 / 5 + 50,
+        x=X_CORD * 3 / 5,
+        y=Y_CORD * 2 / 5 + 50,
         anchor="center",
     )
     conf_pass.place(
-        x=x_cord * 3 / 5,
-        y=y_cord * 2 / 5 + 100,
+        x=X_CORD * 3 / 5,
+        y=Y_CORD * 2 / 5 + 100,
         anchor="center",
     )
     # Allowing an admin to create a standard or admin account
     admin_opt = OptionMenu(reg, admin, *choices)
     admin_opt.place(
-        x=x_cord * 3 / 5,
-        y=y_cord * 2 / 5 + 150,
+        x=X_CORD * 3 / 5,
+        y=Y_CORD * 2 / 5 + 150,
         anchor="center",
     )
     # Lets teachers set targets for students
     target_opt = OptionMenu(reg, target, *grades)
     target_opt.place(
-        x=x_cord * 3 / 5,
-        y=y_cord * 3 / 5 + 100,
+        x=X_CORD * 3 / 5,
+        y=Y_CORD * 3 / 5 + 100,
         anchor="center"
     )
     data = [new_user, new_pass, conf_pass, admin, new_email, target]
     Button(
         reg,
         text="Register",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         command=lambda: create_acc(data, reg),
     ).place(
-        x=x_cord * 1 / 3, y=y_cord * 5 / 6, anchor="center"
+        x=X_CORD * 1 / 3, y=Y_CORD * 5 / 6, anchor="center"
     )
     Button(
         reg,
         text="Back",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         command=lambda: (
             reg.destroy(),
             main_screen_admin(),
         ),
     ).place(
-        x=x_cord * 2 / 3, y=y_cord * 5 / 6, anchor="center"
+        x=X_CORD * 2 / 3, y=Y_CORD * 5 / 6, anchor="center"
     )
 
 
@@ -330,8 +340,8 @@ def view_students(win):
     win.destroy()
     progress = Tk()
     graph_frame = Frame(progress)
-    progress.geometry(size)
-    progress.configure(bg=bgc)
+    progress.geometry(SIZE)
+    progress.configure(bg=BGC)
     progress.title("Class Progress")
     # using matplotlib to create the graph
     all_points = db.retrieve_completed(1, user=db.first_user())
@@ -339,7 +349,7 @@ def view_students(win):
     for point in range(len(all_points)):
         renamed_points.append([float(all_points[point][0]), point])
     x_points, y_points, x_index = bubble_sorting_data(renamed_points)
-    scores_over_time = Figure(figsize=(5, 4), dpi=80)
+    scores_over_time = Figure(figSIZE=(5, 4), dpi=80)
     canvas_scores = FigureCanvasTkAgg(scores_over_time, master=graph_frame)
     ax_1 = scores_over_time.add_subplot(111)
     ax_1.set_xlabel('Homework-Number')
@@ -350,46 +360,48 @@ def view_students(win):
     ax_1.set_xticklabels(x_points)
     ax_1.xaxis.set_major_locator(MaxNLocator(integer=True))
     canvas_scores.draw()
-    canvas_scores.get_tk_widget().place(x=x_cord / 4, y=(y_cord / 4) + 25, anchor='center')
-
+    canvas_scores.get_tk_widget().place(x=X_CORD / 4, y=(Y_CORD / 4) + 25, anchor='center')
+    choices = db.all_students()
+    selected_student = StringVar()
+    students = OptionMenu(progress, selected_student, *choices)
     Label(
         progress,
         text="This is your Classes Progress",
-        bg=bgc,
-        fg=fgc,
-        font=def_font,
-    ).place(x=x_cord / 2, y=(y_cord / 10) - 50, anchor='center')
+        bg=BGC,
+        fg=FGC,
+        font=DEF_FONT,
+    ).place(x=X_CORD / 2, y=(Y_CORD / 10) - 50, anchor='center')
     Button(
         progress,
         text="Back",
-        bg=bgc,
-        fg=fgc,
-        font=def_font,
+        bg=BGC,
+        fg=FGC,
+        font=DEF_FONT,
         command=lambda: (stop_graph(progress), main_screen_user())
-    ).place(x=x_cord * 9 / 10, y=y_cord / 7, anchor='center')
+    ).place(x=X_CORD * 9 / 10, y=Y_CORD / 7, anchor='center')
     progress.mainloop()
 
 
 # From here the teachers can view their current test they're making and publish it to students
 
-
 def create_quiz(win):
     win.destroy()
     quiz = Tk()
-    quiz.geometry(size)
-    quiz.configure(bg=bgc)
+    quiz.geometry(SIZE)
+    quiz.configure(bg=BGC)
     quiz.resizable(False, False)
     topic = Text(quiz, width=35, height=4, font=('quicksand', 11))
     topic.place(
-        x=x_cord * 1 / 2, y=y_cord * 1 / 2, anchor="center"
+        x=X_CORD * 1 / 2, y=Y_CORD * 1 / 2, anchor="center"
     )
+    # Tree to show all the currently made questions to teacher
     tree = Treeview(quiz, column=("column1", "column2"), show="headings")
     tree.heading("#1", text="Question")
     tree.heading("#2", text="Question No.")
     for question in range(len(db.current_questions)):
         insert_tree_vals = tree.insert("", "end", text=db.question_names[question], values=(db.question_names[question], question+1))
     tree.update()
-    tree.place(x=x_cord / 2, y=y_cord * 4 / 5, anchor="center")
+    tree.place(x=X_CORD / 2, y=Y_CORD * 4 / 5, anchor="center")
     lbls = [
         "Create a quiz",
         "Give the quiz a name and the topic it is based on",
@@ -399,20 +411,20 @@ def create_quiz(win):
     for lbl in range(len(lbls)):
         Label(
             quiz,
-            bg=bgc,
-            fg=fgc,
+            bg=BGC,
+            fg=FGC,
             text=lbls[lbl],
-            font=def_font,
+            font=DEF_FONT,
         ).place(
-            x=x_cord * 1 / 2,
-            y=y_cord * 1 / 5 + 35 * lbl,
+            x=X_CORD * 1 / 2,
+            y=Y_CORD * 1 / 5 + 35 * lbl,
             anchor="center",
         )
     create = Button(
         quiz,
         text="+",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         font=("System", 10),
         width=10,
         height=2,
@@ -421,8 +433,8 @@ def create_quiz(win):
     exit = Button(
         quiz,
         text="Exit",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         font=("System", 10),
         width=10,
         height=2,
@@ -434,8 +446,8 @@ def create_quiz(win):
     save_quiz = Button(
         quiz,
         text="Publish Quiz",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         font=("System", 10),
         width=10,
         height=2,
@@ -451,24 +463,24 @@ def create_quiz(win):
     delete_question = Button(
         quiz,
         text="Delete Question",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         font=("System", 10),
         width=20,
         height=2,
         command=lambda: db.remove_question(tree.selection()[0], tree)
     )
     create.place(
-        x=x_cord * 1 / 6, y=y_cord * 1 / 4, anchor="center"
+        x=X_CORD * 1 / 6, y=Y_CORD * 1 / 4, anchor="center"
     )
     exit.place(
-        x=x_cord * 5 / 6, y=y_cord * 1 / 4, anchor="center"
+        x=X_CORD * 5 / 6, y=Y_CORD * 1 / 4, anchor="center"
     )
     save_quiz.place(
-        x=x_cord * 5 / 6, y=y_cord * 4 / 5, anchor="center"
+        x=X_CORD * 5 / 6, y=Y_CORD * 4 / 5, anchor="center"
     )
     delete_question.place(
-        x=x_cord * 1 / 5, y=y_cord * 4 / 5, anchor="center"
+        x=X_CORD * 1 / 5, y=Y_CORD * 4 / 5, anchor="center"
     )
 
 
@@ -480,8 +492,8 @@ def insert_integral(root):
 # Gives GUI for creating questions including database input
 def create_question(tree):
     question = Tk()
-    question.geometry(size)
-    question.configure(bg=bgc)
+    question.geometry(SIZE)
+    question.configure(bg=BGC)
     question.resizable(False, False)
     q_var_ent = Text(question, width=45, height=5, font=('Quicksand', 11))
     ans_1_ent = Text(question, width=25, height=1, font=('Quicksand', 8))
@@ -501,44 +513,44 @@ def create_question(tree):
     for entry in range(len(q_details)):
         if entry == 0:
             q_details[entry].place(
-                x=x_cord * 1 / 2,
-                y=y_cord * entry + 40,
+                x=X_CORD * 1 / 2,
+                y=Y_CORD * entry + 40,
                 anchor="center",
             )
 
             Label(
                 question,
                 text=lbls[entry],
-                bg=bgc,
-                fg=fgc,
-                font=def_font,
+                bg=BGC,
+                fg=FGC,
+                font=DEF_FONT,
             ).place(
-                x=x_cord * 1 / 6,
-                y=y_cord * entry + 45,
+                x=X_CORD * 1 / 6,
+                y=Y_CORD * entry + 45,
                 anchor="center",
             )
         q_details[entry].place(
-            x=x_cord * 1 / 2,
-            y=y_cord * entry / 6 + 50,
+            x=X_CORD * 1 / 2,
+            y=Y_CORD * entry / 6 + 50,
             anchor="center",
         )
 
         Label(
             question,
             text=lbls[entry],
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
         ).place(
-            x=x_cord * 1 / 6,
-            y=y_cord * entry / 6 + 50,
+            x=X_CORD * 1 / 6,
+            y=Y_CORD * entry / 6 + 50,
             anchor="center",
         )
     add_q_btn = Button(
         question,
         text="Create\nQuestion",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=3,
         command=lambda: (
@@ -551,8 +563,8 @@ def create_question(tree):
     delete_q_btn = Button(
         question,
         text="Back",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=3,
         command=lambda: create_quiz(question)
@@ -560,8 +572,8 @@ def create_question(tree):
     superscript_btn = Button(
         question,
         text='²',
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=10,
         height=2,
         command=lambda: change_offset(question, 'super')
@@ -569,8 +581,8 @@ def create_question(tree):
     subscript_btn = Button(
         question,
         text='ₐ',
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=10,
         height=2,
         command=lambda: change_offset(question, 'sub')
@@ -578,26 +590,26 @@ def create_question(tree):
     integral_btn = Button(
         question,
         text='∫',
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=10,
         height=2,
         command=lambda: insert_integral(question)
     )
     add_q_btn.place(
-        x=x_cord * 5 / 6, y=y_cord * 1 / 3, anchor="center"
+        x=X_CORD * 5 / 6, y=Y_CORD * 1 / 3, anchor="center"
     )
     delete_q_btn.place(
-        x=x_cord * 5 / 6, y=y_cord * 2 / 3, anchor="center"
+        x=X_CORD * 5 / 6, y=Y_CORD * 2 / 3, anchor="center"
     )
     superscript_btn.place(
-        x=x_cord * 5 / 7, y=y_cord * 1 / 8, anchor="center"
+        x=X_CORD * 5 / 7, y=Y_CORD * 1 / 8, anchor="center"
     )
     subscript_btn.place(
-        x=x_cord * 5 / 7, y=y_cord * 1 / 5, anchor="center"
+        x=X_CORD * 5 / 7, y=Y_CORD * 1 / 5, anchor="center"
     )
     integral_btn.place(
-        x=x_cord * 7 / 8, y=y_cord * 1 / 5, anchor="center"
+        x=X_CORD * 7 / 8, y=Y_CORD * 1 / 5, anchor="center"
     )
     question.mainloop()
 
@@ -606,17 +618,17 @@ def change_offset(root, offset_type):
     entry_box = root.focus_get()
     offset = Tk()
     offset.geometry('300x400')
-    offset.configure(bg=bgc)
+    offset.configure(bg=BGC)
     Label(offset, text='Insert the text that\nyou would like with an offset',
-          bg=bgc, fg=fgc).place(x=150, y=100, anchor='center')
+          bg=BGC, fg=FGC).place(x=150, y=100, anchor='center')
     ent = Entry(offset)
     ent.place(x=150, y=200, anchor='center')
     if offset_type == 'super':
         enter_btn = Button(
             offset,
             text='Enter',
-            bg=bgc,
-            fg=fgc,
+            bg=BGC,
+            fg=FGC,
             command=lambda: [entry_box.insert('insert', to_sup(ent.get())), offset.destroy()]
         )
         enter_btn.place(x=150, y=350, anchor='center')
@@ -624,8 +636,8 @@ def change_offset(root, offset_type):
         enter_btn = Button(
             offset,
             text='Enter',
-            bg=bgc,
-            fg=fgc,
+            bg=BGC,
+            fg=FGC,
             command=lambda: [entry_box.insert('insert', to_sub(ent.get())), offset.destroy()]
         )
         enter_btn.place(x=150, y=350, anchor='center')
@@ -697,8 +709,8 @@ def to_sub(s):
 def main_screen_user():
     main_win = Tk()
     main_win.title("Main Window")
-    main_win.geometry(size)
-    main_win.configure(bg=bgc)
+    main_win.geometry(SIZE)
+    main_win.configure(bg=BGC)
     main_lbls = [
         "Welcome Back",
         "Here you can either complete work or check your performance",
@@ -707,48 +719,48 @@ def main_screen_user():
         Label(
             main_win,
             text=main_lbls[lbls],
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
         ).place(
-            x=x_cord * 1 / 2,
-            y=y_cord * 1 / 5 + 50 * lbls,
+            x=X_CORD * 1 / 2,
+            y=Y_CORD * 1 / 5 + 50 * lbls,
             anchor="center",
         )
     Button(
         main_win,
         text="Complete a Quiz",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=7,
         command=lambda: complete_quiz(main_win),
     ).place(
-        x=x_cord * 1 / 3, y=y_cord * 1 / 2, anchor="center"
+        x=X_CORD * 1 / 3, y=Y_CORD * 1 / 2, anchor="center"
     )
 
     Button(
         main_win,
         text="Personal Review",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=7,
         command=lambda: view_progress(main_win),
     ).place(
-        x=x_cord * 2 / 3, y=y_cord * 1 / 2, anchor="center"
+        x=X_CORD * 2 / 3, y=Y_CORD * 1 / 2, anchor="center"
     )
 
     Button(
         main_win,
         text="Log Out",
-        bg=bgc,
-        fg=fgc,
+        bg=BGC,
+        fg=FGC,
         width=20,
         height=3,
         command=lambda: (main_win.destroy(), login()),
     ).place(
-        x=x_cord * 1 / 2, y=y_cord * 5 / 6, anchor="center"
+        x=X_CORD * 1 / 2, y=Y_CORD * 5 / 6, anchor="center"
     )
 
 
@@ -787,7 +799,7 @@ def timer(
                 question,
             )
 
-# submitting an answer and checkin against the database before moving on to next question
+# submitting an answer and checking against the database before moving on to next question
 def submit_ans(correct, score, win, frame, next_question):
     submit_ans.has_been_called = True
     next_question += 1
@@ -815,34 +827,34 @@ def submit_ans(correct, score, win, frame, next_question):
 def end_test(win, score, question):
     win.destroy()
     end_screen = Tk()
-    end_screen.geometry(size)
+    end_screen.geometry(SIZE)
     end_screen.title("Quiz Complete!")
-    end_screen.configure(bg=bgc)
+    end_screen.configure(bg=BGC)
     Label(
         end_screen,
         text="You Completed a quiz",
-        fg=fgc,
-        bg=bgc,
-        font=def_font,
-    ).place(x=x_cord / 2, y=y_cord * 1 / 7, anchor="center")
+        fg=FGC,
+        bg=BGC,
+        font=DEF_FONT,
+    ).place(x=X_CORD / 2, y=Y_CORD * 1 / 7, anchor="center")
     Label(
         end_screen,
         text="You Scored "
              + str(score)
              + "/"
              + str(question),
-        fg=fgc,
-        bg=bgc,
-        font=def_font,
-    ).place(x=x_cord / 2, y=y_cord * 1 / 2, anchor="center")
+        fg=FGC,
+        bg=BGC,
+        font=DEF_FONT,
+    ).place(x=X_CORD / 2, y=Y_CORD * 1 / 2, anchor="center")
     Button(
         end_screen,
         text="Exit",
-        fg=fgc,
-        bg=bgc,
-        font=def_font,
+        fg=FGC,
+        bg=BGC,
+        font=DEF_FONT,
         command=lambda: (end_screen.destroy(), main_screen_user())
-    ).place(x=x_cord * 4 / 5, y=y_cord / 5, anchor='center')
+    ).place(x=X_CORD * 4 / 5, y=Y_CORD / 5, anchor='center')
     db.end_test(score, question)
     db.close_data()
 
@@ -860,30 +872,30 @@ def quiz_active(win, frame, question=0, score=0):
         Label(
             win,
             text=db.question_details[question][0][1],
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
         ).place(
-            x=x_cord / 2, y=y_cord / 10, anchor="center"
+            x=X_CORD / 2, y=Y_CORD / 10, anchor="center"
         )
         time_label = Label(
             win,
             textvariable=current_time,
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
         )
         time_label.place(
-            x=x_cord * 4 / 5,
-            y=y_cord * 1 / 10,
+            x=X_CORD * 4 / 5,
+            y=Y_CORD * 1 / 10,
             anchor="center",
         )
         correct_ans = Button(
             win,
             text=db.answers[question][0][1],
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
             width=20,
             height=3,
             command=lambda: submit_ans(
@@ -893,9 +905,9 @@ def quiz_active(win, frame, question=0, score=0):
         incorrect_ans_1 = Button(
             win,
             text=db.answers[question][1][1],
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
             width=20,
             height=3,
             command=lambda: submit_ans(
@@ -905,9 +917,9 @@ def quiz_active(win, frame, question=0, score=0):
         incorrect_ans_2 = Button(
             win,
             text=db.answers[question][2][1],
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
             width=20,
             height=3,
             command=lambda: submit_ans(
@@ -917,9 +929,9 @@ def quiz_active(win, frame, question=0, score=0):
         incorrect_ans_3 = Button(
             win,
             text=db.answers[question][3][1],
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
             width=20,
             height=3,
             command=lambda: submit_ans(
@@ -937,26 +949,26 @@ def quiz_active(win, frame, question=0, score=0):
             selected = random.choice(ans_buttons)
             if elements == 0:
                 selected.place(
-                    x=x_cord / 3,
-                    y=y_cord / 3,
+                    x=X_CORD / 3,
+                    y=Y_CORD / 3,
                     anchor="center",
                 )
             elif elements == 1:
                 selected.place(
-                    x=x_cord * (2 / 3),
-                    y=y_cord / 3,
+                    x=X_CORD * (2 / 3),
+                    y=Y_CORD / 3,
                     anchor="center",
                 )
             elif elements == 2:
                 selected.place(
-                    x=x_cord / 3,
-                    y=y_cord * (2 / 3),
+                    x=X_CORD / 3,
+                    y=Y_CORD * (2 / 3),
                     anchor="center",
                 )
             else:
                 selected.place(
-                    x=x_cord * (2 / 3),
-                    y=y_cord * (2 / 3),
+                    x=X_CORD * (2 / 3),
+                    y=Y_CORD * (2 / 3),
                     anchor="center",
                 )
             ans_buttons.remove(selected)
@@ -977,33 +989,33 @@ def complete_quiz(win):
     win.destroy()
     quiz = Tk()
     quiz.title("Quiz")
-    quiz.geometry(size)
-    quiz.configure(bg=bgc)
+    quiz.geometry(SIZE)
+    quiz.configure(bg=BGC)
     quiz_area = Frame(
-        quiz, width=x_cord, height=y_cord, bg=bgc
+        quiz, width=X_CORD, height=Y_CORD, bg=BGC
     )
     quiz_area.pack()
     db.retrieve_quizes()
     Label(
         quiz_area,
         text="Here are the quizzes available to you",
-        bg=bgc,
-        fg=fgc,
-        font=def_font,
-    ).place(x=x_cord / 2, y=y_cord / 10, anchor="center")
+        bg=BGC,
+        fg=FGC,
+        font=DEF_FONT,
+    ).place(x=X_CORD / 2, y=Y_CORD / 10, anchor="center")
     Button(
         quiz_area,
         text="Back",
-        fg=fgc,
-        bg=bgc,
-        font=def_font,
+        fg=FGC,
+        bg=BGC,
+        font=DEF_FONT,
         command=lambda: (
             main_screen_user(),
             quiz.destroy(),
             reset_tests(),
         ),
     ).place(
-        x=x_cord * 3 / 4, y=y_cord / 10, anchor="center"
+        x=X_CORD * 3 / 4, y=Y_CORD / 10, anchor="center"
     )
     x_pos = 1
     y_pos = 1
@@ -1015,12 +1027,12 @@ def complete_quiz(win):
         Label(
             quiz_area,
             text=db.quiz_details[data],
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
         ).place(
-            x=x_cord * (x_pos / 4),
-            y=(y_cord * y_pos / 5) - 100,
+            x=X_CORD * (x_pos / 4),
+            y=(Y_CORD * y_pos / 5) - 100,
             anchor="center",
         )
         Button(
@@ -1030,10 +1042,10 @@ def complete_quiz(win):
                 db.start_test(selected_quiz),
                 quiz_active(quiz, quiz_area),
             ),
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
-        ).place(x=x_cord * (x_pos / 4), y=(y_cord * y_pos / 5) - 50, anchor="center")
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
+        ).place(x=X_CORD * (x_pos / 4), y=(Y_CORD * y_pos / 5) - 50, anchor="center")
 
 # external function to stop the graph as if the window is just destroyed then an error is created
 def stop_graph(win):
@@ -1045,8 +1057,8 @@ def stop_graph(win):
 def view_progress(win):
     win.destroy()
     progress = Tk()
-    progress.geometry(size)
-    progress.configure(bg=bgc)
+    progress.geometry(SIZE)
+    progress.configure(bg=BGC)
     progress.title("Personal Progress")
     # using matplotlib to create the graph
     all_points = db.retrieve_completed(1)
@@ -1054,7 +1066,7 @@ def view_progress(win):
     for point in range(len(all_points)):
         renamed_points.append([float(all_points[point][0]), point])
     x_points, y_points, x_index = bubble_sorting_data(renamed_points)
-    scores_over_time = Figure(figsize=(5, 4), dpi=80)
+    scores_over_time = Figure(figSIZE=(5, 4), dpi=80)
     canvas_scores = FigureCanvasTkAgg(scores_over_time, master=progress)
     ax_1 = scores_over_time.add_subplot(111)
     ax_1.set_xlabel('Homework-Number')
@@ -1065,30 +1077,30 @@ def view_progress(win):
     ax_1.set_xticklabels(x_points)
     ax_1.xaxis.set_major_locator(MaxNLocator(integer=True))
     canvas_scores.draw()
-    canvas_scores.get_tk_widget().place(x=x_cord / 4, y=(y_cord / 4) + 25, anchor='center')
+    canvas_scores.get_tk_widget().place(x=X_CORD / 4, y=(Y_CORD / 4) + 25, anchor='center')
     Label(
         progress,
         text="This is your Progress",
-        bg=bgc,
-        fg=fgc,
-        font=def_font,
-    ).place(x=x_cord / 2, y=(y_cord / 10) - 50, anchor='center')
+        bg=BGC,
+        fg=FGC,
+        font=DEF_FONT,
+    ).place(x=X_CORD / 2, y=(Y_CORD / 10) - 50, anchor='center')
     Button(
         progress,
         text="Back",
-        bg=bgc,
-        fg=fgc,
-        font=def_font,
+        bg=BGC,
+        fg=FGC,
+        font=DEF_FONT,
         command=lambda: (stop_graph(progress), main_screen_user())
-    ).place(x=x_cord * 9 / 10, y=y_cord / 7, anchor='center')
+    ).place(x=X_CORD * 9 / 10, y=Y_CORD / 7, anchor='center')
     for weakness in range(len(db.user_weakness())):
         Label(
             progress,
             text=db.user_weakness()[weakness],
-            bg=bgc,
-            fg=fgc,
-            font=def_font,
-        ).place(x=x_cord * 3 / 4, y=(y_cord * 7 / 10) + (50 * weakness), anchor='center')
+            bg=BGC,
+            fg=FGC,
+            font=DEF_FONT,
+        ).place(x=X_CORD * 3 / 4, y=(Y_CORD * 7 / 10) + (50 * weakness), anchor='center')
 
     progress.mainloop()
 
@@ -1106,10 +1118,10 @@ def bubble_sorting_data(graph_data):
     x_points = ['',]
     y_points = []
     amount_of_x = []
-    for size in range(len(graph_data)):
-        y_points.append(graph_data[size][0])
-        x_points.append(("HW: " + str(graph_data[size][1] + 1)))
-        amount_of_x.append(graph_data[size][1] + 1)
+    for SIZE in range(len(graph_data)):
+        y_points.append(graph_data[SIZE][0])
+        x_points.append(("HW: " + str(graph_data[SIZE][1] + 1)))
+        amount_of_x.append(graph_data[SIZE][1] + 1)
     if len(y_points) == 1:
         y_points.append(0)
         x_points.append('')

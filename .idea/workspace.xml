@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1df29f0a-23bd-45a2-af99-ad9cdea860a0" name="Default Changelist" comment="">
+    <list default="true" id="1df29f0a-23bd-45a2-af99-ad9cdea860a0" name="Default Changelist" comment="F">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Database_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main_file.py" afterDir="false" />
@@ -34,7 +34,7 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Git/bin/git.exe" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -326,7 +326,49 @@
       <option name="project" value="LOCAL" />
       <updated>1574331454919</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Email structure now complete; need to query for user details">
+      <created>1574849779332</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1574849779332</updated>
+    </task>
+    <task id="LOCAL-00018" summary="computery sciency">
+      <created>1575037308853</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1575037308853</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Tree view complete,&#10;To Do:&#10;Targets,&#10;More Graphs (animation?)">
+      <created>1575281826908</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1575281826908</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Target system implemented">
+      <created>1575886630482</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1575886630482</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Made Teacher side have access to data visualisation">
+      <created>1575996960662</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1575996960662</updated>
+    </task>
+    <task id="LOCAL-00022" summary="16/12/19">
+      <created>1576491437840</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1576491437840</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -374,7 +416,12 @@
     <MESSAGE value="Graphs fixed due to forced integers and increased figsize, note: subscript function to be finished and more graphs to be crafted using the database data" />
     <MESSAGE value="subscript now integrated" />
     <MESSAGE value="Email structure now complete; need to query for user details" />
-    <option name="LAST_COMMIT_MESSAGE" value="Email structure now complete; need to query for user details" />
+    <MESSAGE value="computery sciency" />
+    <MESSAGE value="Tree view complete,&#10;To Do:&#10;Targets,&#10;More Graphs (animation?)" />
+    <MESSAGE value="Target system implemented" />
+    <MESSAGE value="Made Teacher side have access to data visualisation" />
+    <MESSAGE value="16/12/19" />
+    <option name="LAST_COMMIT_MESSAGE" value="16/12/19" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
